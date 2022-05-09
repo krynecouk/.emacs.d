@@ -4,51 +4,28 @@
 ;; disable some gcc warns
 (setq native-comp-async-report-warnings-errors nil) 
 
-;; hide window bar
+;; ui
 (menu-bar-mode 0)                                   
-
-;; hide emacs and scroll bars
 (when (display-graphic-p)                           
   (tool-bar-mode 0)                                 
   (scroll-bar-mode 0))                              
-
-;; don't show intro
 (setq inhibit-startup-screen t)                     
-
-;; no scratch message
 (setq initial-scratch-message nil)
-
-;; change default theme
 (load-theme 'modus-vivendi t)                       
-
-;; disable ring bell
 (setq ring-bell-function 'ignore)                   
-
-;; no paren delay
 (setq show-paren-delay 0)
-
-;; change windows size
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
-
-;; column settings
 (global-display-line-numbers-mode t)
 (setq display-line-numbers-current-absolute nil)
 (setq display-line-numbers 'relative)
 
-;; org settings
-(setq org-indent-mode t)
-(setq org-src-preserve-indentation t)
-
-;; write auto-saves and backups to separate directory
+;; write auto-saves, backups and customs to separate directory
 (make-directory "~/.tmp/emacs/auto-save/" t)
 (setq auto-save-file-name-transforms '((".*" "~/.tmp/emacs/auto-save/" t)))
 (setq backup-directory-alist '(("." . "~/.tmp/emacs/backup/")))
-
-;; do not move the current file while creating backup
 (setq backup-by-copying t)
-
-;; disable lockfiles
 (setq create-lockfiles nil)
+(setq custom-file (concat user-emacs-directory "/custom.el"))
 
 ;; file search
 (ido-mode 1)
@@ -62,6 +39,3 @@
 (package-initialize)
 (unless package-archive-contents
   (package-refresh-contents))
-
-;; move custom to different file
-(setq custom-file (concat user-emacs-directory "/custom.el"))

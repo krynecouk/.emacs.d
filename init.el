@@ -6,6 +6,7 @@
 
 ;; packages
 (load-package "core")
+(load-package "org")
 (load-package "evil")
 
 ;; mappings
