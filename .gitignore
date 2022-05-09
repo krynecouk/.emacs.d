@@ -2,3 +2,5 @@
 !.gitignore
 !init.el
 !README.org
+!packages/
+!packages/*
