@@ -4,6 +4,12 @@
 ;; disable some gcc warns
 (setq native-comp-async-report-warnings-errors nil) 
 
+;; columns settings
+(setq display-line-numbers 'relative)
+(setq display-line-numbers-type 'relative)
+(setq display-line-numbers-current-absolute t)
+(global-display-line-numbers-mode t)
+
 ;; ui
 (menu-bar-mode 0)                                   
 (when (display-graphic-p)                           
@@ -15,9 +21,7 @@
 (setq ring-bell-function 'ignore)                   
 (setq show-paren-delay 0)
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
-(global-display-line-numbers-mode t)
-(setq display-line-numbers-current-absolute nil)
-(setq display-line-numbers 'relative)
+
 
 ;; write auto-saves, backups and customs to separate directory
 (make-directory "~/.tmp/emacs/auto-save/" t)
