@@ -21,6 +21,9 @@
 (setq ring-bell-function 'ignore)                   
 (setq show-paren-delay 0)
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
+(global-visual-line-mode)
+;; (visual-line-mode 1)
+(setq-default word-wrap t)
 
 
 ;; write auto-saves, backups and customs to separate directory
