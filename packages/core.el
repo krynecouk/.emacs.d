@@ -31,15 +31,10 @@
 (setq create-lockfiles nil)
 (setq custom-file (concat user-emacs-directory "/custom.el"))
 
-;; file search
-(ido-mode 1)
-(ido-everywhere)
-(setq ido-enable-flex-matching t)
-(fido-mode)
-
-;; enable installation of packages from MELPA
+;; enable installation of packages from MELPA & ELPA
 (require 'package)
-(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+(add-to-list 'package-archives '(("melpa" . "https://melpa.org/packages/")
+				 ("gnu" . "http://elpa.gnu.org/packages/")))
 (package-initialize)
 (unless package-archive-contents
   (package-refresh-contents))

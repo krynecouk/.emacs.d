@@ -13,6 +13,7 @@
 (when (require 'evil-collection nil t)
   (evil-collection-init))
 
-(evil-commentary-mode)
-(setq global-evil-surround-mode 1)
+(evil-commentary-mode 1)
 (evil-mode 1)
+(evil-surround-mode 1)
+

@@ -8,6 +8,7 @@
 (load-package "core")
 (load-package "org")
 (load-package "evil")
+(load-package "vertico")
 
 ;; mappings
-(global-set-key (kbd "C-x C-b") 'ido-switch-buffer)
+(global-set-key (kbd "C-x C-b") 'switch-to-buffer)
