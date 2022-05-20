@@ -1,2 +1,15 @@
 * Personal Emacs Configuration
-tbd
+** Installation 
+- [[https://github.com/d12frosted/homebrew-emacs-plus][Emacs Plus]]
+** Errors
+*** linker library load error
+#+begin_src sh
+emacs -Q & \
+find-file init.el & \
+M-x eval-buffer
+#+end_src
+or 
+#+begin_src sh
+brew reinstall gcc libgccjit
+#+end_src
+

@@ -8,4 +8,6 @@
 (load-package "core")
 (load-package "org")
 (load-package "evil")
+(load-package "magit")
 (load-package "vertico")
+(load-package "projectile")
