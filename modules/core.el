@@ -4,7 +4,7 @@
 ;; disable some gcc warns
 (setq native-comp-async-report-warnings-errors nil)
 
-;; columns settings
+;; row settings
 (setq
  display-line-numbers 'relative
  display-line-numbers-type 'relative
@@ -47,3 +47,6 @@
       (goto-char (point-max))
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
+
+(straight-use-package 'use-package)
+(setq straight-use-package-by-default t)
