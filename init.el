@@ -3,3 +3,4 @@
 (load-module "org")
 (load-module "vertico")
 (load-module "magit")
+(load-module "vterm")
