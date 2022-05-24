@@ -3,5 +3,5 @@
 !early-init.el
 !init.el
 !README.org
-!packages/
-!packages/*
+!modules/
+!modules/*
