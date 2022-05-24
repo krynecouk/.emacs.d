@@ -1,4 +1,6 @@
 (use-package evil-collection
+  :init
+  (setq evil-want-keybinding nil)
   :config (evil-collection-init))
 
 (use-package evil-commentary

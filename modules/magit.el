@@ -1,2 +1,1 @@
-;; install
-(straight-use-package 'magit)
+(use-package magit)
