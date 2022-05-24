@@ -1,13 +1,6 @@
-(defun path (package)
-  (concat user-emacs-directory (concat "/packages/" (concat package ".el"))))
-
-(defun load-package (package)
-  (load-file (path package)))
-
-;; packages
-(load-package "core")
-(load-package "org")
-(load-package "evil")
-(load-package "magit")
-(load-package "vertico")
-(load-package "projectile")
+(load-module "core")
+(load-module "evil")
+(load-module "vertico")
+(load-module "org")
+(load-module "magit")
+(load-module "projectile")
