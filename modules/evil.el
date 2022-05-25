@@ -20,17 +20,21 @@
     "gg" 'magit
     "pp" 'project-switch-project
     "<SPC>" 'project-find-file
-    "*" 'project-find-regexp))
+    "*" 'project-find-regexp
+    "," 'project-switch-to-buffer)
+  )
 
 (use-package evil
   :init
   (setq
    evil-search-module 'evil-search
    evil-undo-system 'undo-redo
-   evil-want-C-u-scroll t
    evil-want-keybinding nil
    evil-respect-visual-line-mode t)
+  :custom
+  (evil-want-C-u-scroll t)
   :config
   (evil-ex-define-cmd "ls" 'ibuffer)
   (evil-ex-define-cmd "term" 'vterm)
+  (setq evil-want-C-u-scroll t)
   (evil-mode 1))
