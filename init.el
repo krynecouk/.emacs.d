@@ -3,4 +3,8 @@
 (load-module "org")
 (load-module "vertico")
 (load-module "magit")
+(load-module "project")
 (load-module "vterm")
+(load-module "treemacs")
+(load-module "deadgrep")
+(load-module "perspective")
