@@ -20,9 +20,10 @@
     "gg" 'magit
     "pp" 'project-switch-project
     "<SPC>" 'project-find-file
-    "*" 'project-find-regexp
-    "," 'project-switch-to-buffer)
-  )
+    "*" 'deadgrep
+    "," 'project-switch-to-buffer
+    "tt" 'treemacs-display-current-project-exclusively
+    "ot" 'vterm-toggle))
 
 (use-package evil
   :init
