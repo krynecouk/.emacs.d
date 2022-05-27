@@ -35,7 +35,7 @@
   :custom
   (evil-want-C-u-scroll t)
   :config
-  (evil-ex-define-cmd "ls" 'ibuffer)
-  (evil-ex-define-cmd "term" 'vterm)
+  (evil-ex-define-cmd "ls" 'persp-ibuffer)
+  (evil-ex-define-cmd "term" 'vterm-toggle)
   (setq evil-want-C-u-scroll t)
   (evil-mode 1))
