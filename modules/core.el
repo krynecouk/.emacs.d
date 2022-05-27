@@ -24,6 +24,7 @@
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 (global-visual-line-mode)
 (visual-line-mode 1)
+(fset 'yes-or-no-p 'y-or-n-p)
 
 ;; write auto-saves, backups and customs to separate directory
 (make-directory "~/.tmp/emacs/auto-save/" t)
