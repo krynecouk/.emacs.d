@@ -11,4 +11,5 @@
 (load-module "mood-line")
 (load-module "center")
 (load-module "lsp")
+(load-module "web")
 ;; company
