@@ -25,6 +25,7 @@
 (global-visual-line-mode)
 (visual-line-mode 1)
 (fset 'yes-or-no-p 'y-or-n-p)
+(add-hook 'before-save-hook 'delete-trailing-whitespace)
 
 ;; write auto-saves, backups and customs to separate directory
 (make-directory "~/.tmp/emacs/auto-save/" t)
@@ -34,6 +35,9 @@
  backup-by-copying t
  create-lockfiles nil
  custom-file (concat user-emacs-directory "/custom.el"))
+
+;; font
+(set-frame-font "Fira Code Medium 12")
 
 ;; install straight
 (defvar bootstrap-version)
