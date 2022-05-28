@@ -37,7 +37,7 @@
  custom-file (concat user-emacs-directory "/custom.el"))
 
 ;; font
-(set-frame-font "Fira Code Medium 12")
+(set-frame-font "-*-Fira Code-semibold-normal-normal-*-12-*-*-*-m-0-iso10646-1")
 
 ;; install straight
 (defvar bootstrap-version)
