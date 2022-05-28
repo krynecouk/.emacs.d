@@ -8,3 +8,5 @@
 (load-module "treemacs")
 (load-module "deadgrep")
 (load-module "perspective")
+(load-module "lsp")
+;; company
