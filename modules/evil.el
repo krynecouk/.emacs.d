@@ -23,7 +23,8 @@
     "*" 'deadgrep
     "," 'project-switch-to-buffer
     "tt" 'treemacs-display-current-project-exclusively
-    "ot" 'vterm-toggle))
+    "ot" 'vterm-toggle
+    "tz" 'centered-window-mode))
 
 (use-package evil
   :init
