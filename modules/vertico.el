@@ -9,3 +9,9 @@
   :bind
   ("C-x C-b" . 'switch-to-buffer)
   ("C-`" . 'switch-to-previous-buffer))
+
+(use-package orderless
+  :custom (completion-styles '(orderless)))
+
+(use-package prescient
+  :config (prescient-persist-mode))
