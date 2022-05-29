@@ -5,9 +5,6 @@
          ("\\.jsx\\'" . web-mode)
          ("\\.ts\\'" . web-mode)
          ("\\.tsx\\'" . web-mode))
-  :hook (web-mode . company-mode)
-  :config
-  (add-to-list 'eglot-server-programs '((web-mode) "typescript-language-server" "--stdio"))
   :custom
   (web-mode-attr-indent-offset 2)
   (web-mode-block-padding 2)

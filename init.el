@@ -1,7 +1,7 @@
 (load-module "core")
 (load-module "evil")
 (load-module "org")
-(load-module "vertico")
+(load-module "completion")
 (load-module "magit")
 (load-module "project")
 (load-module "vterm")
@@ -12,4 +12,3 @@
 (load-module "center")
 (load-module "lsp")
 (load-module "web")
-;; company

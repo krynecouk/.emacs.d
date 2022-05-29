@@ -1,3 +1,9 @@
+(defun format-or-indent ()
+  (interactive)
+  (cond
+   ((eglot-managed-p) (eglot-format-buffer))
+   (t (indent-region (point-min) (point-max) nil))))
+
 (use-package evil-collection
   :init
   (setq evil-want-keybinding nil)
@@ -10,7 +16,7 @@
 
 (use-package evil-surround
   :config
-  (evil-surround-mode 1))
+  (global-evil-surround-mode 1))
 
 (use-package evil-leader
   :config
@@ -19,6 +25,7 @@
   (evil-leader/set-key
     "gg" 'magit
     "pp" 'project-switch-project
+    "ff" 'format-or-indent
     "<SPC>" 'project-find-file
     "*" 'deadgrep
     "," 'project-switch-to-buffer
@@ -26,15 +33,17 @@
     "ot" 'vterm-toggle
     "tz" 'centered-window-mode))
 
+(use-package evil-goggles
+  :config
+  (evil-goggles-mode 1))
+
 (use-package evil
-  :init
-  (setq
-   evil-search-module 'evil-search
-   evil-undo-system 'undo-redo
-   evil-want-keybinding nil
-   evil-respect-visual-line-mode t)
   :custom
   (evil-want-C-u-scroll t)
+  (evil-undo-system 'undo-redo)
+  (evil-search-module 'evil-search)
+  (evil-want-keybinding nil)
+  (evil-respect-visual-line-mode t)
   :config
   (evil-ex-define-cmd "ls" 'persp-ibuffer)
   (evil-ex-define-cmd "term" 'vterm-toggle)
