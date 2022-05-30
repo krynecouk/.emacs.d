@@ -1,8 +1,11 @@
 (defun format-or-indent ()
   (interactive)
   (cond
-   ((eglot-managed-p) (eglot-format-buffer))
+   ((equal major-mode 'web-mode) (prettier-js))
+   ;; ((eglot-managed-p) (eglot-format-buffer))
    (t (indent-region (point-min) (point-max) nil))))
+
+(equal major-mode 'emacs-lisp-mode)
 
 (use-package evil-collection
   :init

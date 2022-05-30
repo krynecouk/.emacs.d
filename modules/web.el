@@ -1,3 +1,9 @@
+(use-package prettier-js
+  :custom (prettier-js-args '("--print-width" "100"
+                              "--single-quote" "true"
+                              "--trailing-comma" "none"
+                              "--semi" "false")))
+
 (use-package web-mode
   :mode (("\\.html?\\'" . web-mode)
          ("\\.js\\'" . web-mode)
@@ -5,6 +11,7 @@
          ("\\.jsx\\'" . web-mode)
          ("\\.ts\\'" . web-mode)
          ("\\.tsx\\'" . web-mode))
+  :hook (web-mode . prettier-js-mode)
   :custom
   (web-mode-attr-indent-offset 2)
   (web-mode-block-padding 2)

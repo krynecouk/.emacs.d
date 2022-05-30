@@ -3,7 +3,6 @@
   :bind (:map
 	 eglot-mode-map
          ("g-R" . eglot-rename)
-         ("C-c C-c" . eglot-code-actions)
          ("M-RET" . eglot-code-actions)
 	 :map
 	 evil-normal-state-map
