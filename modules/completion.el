@@ -15,9 +15,15 @@
   (vertico-mode 1)
   :bind
   ("C-x C-b" . 'switch-to-buffer)
-  ("C-`" . 'switch-to-previous-buffer)
+  ;; ("C-`" . 'switch-to-previous-buffer)
   :custom
   (vertico-cycle t))
+
+(use-package corfu
+  :config
+  (global-corfu-mode 1)
+  :custom
+  (corfu-cycle t))
 
 (use-package consult
   :bind (:map
@@ -34,8 +40,8 @@
 	 ("\"" . 'yank-pop-indent)
 	 ("C-f" . 'consult-line)
 	 ("M-f" . 'consult-ripgrep)
-	 ("gs" . 'consult-imenu)
-         ("g?"   . 'consult-flymake))
+	 ("g-s" . 'consult-imenu)
+         ("g-?"   . 'consult-flymake))
   :custom
   (completion-in-region-function 'consult-completion-in-region)
   (xref-show-xrefs-function 'consult-xref)

@@ -10,7 +10,8 @@
          ("\\.css\\'" . web-mode)
          ("\\.jsx\\'" . web-mode)
          ("\\.ts\\'" . web-mode)
-         ("\\.tsx\\'" . web-mode))
+         ("\\.tsx\\'" . web-mode)
+         ("\\.mdx\\'" . web-mode))
   :hook (web-mode . prettier-js-mode)
   :custom
   (web-mode-attr-indent-offset 2)

@@ -5,6 +5,7 @@
 (load-module "magit")
 (load-module "project")
 (load-module "vterm")
+(load-module "popper")
 (load-module "treemacs")
 (load-module "deadgrep")
 (load-module "perspective")
@@ -12,3 +13,4 @@
 (load-module "center")
 (load-module "lsp")
 (load-module "web")
+(load-module "custom")

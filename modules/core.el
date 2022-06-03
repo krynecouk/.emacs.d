@@ -1,6 +1,9 @@
 ;; force cmd as meta
 (setq mac-command-modifier 'meta)
 
+;; gc treshold (100mb)
+(setq gc-cons-threshold 100000000)
+
 ;; disable some gcc warns
 (setq native-comp-async-report-warnings-errors nil)
 

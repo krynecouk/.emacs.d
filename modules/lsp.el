@@ -2,23 +2,17 @@
   :hook ((web-mode . eglot-ensure))
   :bind (:map
 	 eglot-mode-map
-         ("g-R" . eglot-rename)
          ("M-RET" . eglot-code-actions)
 	 :map
 	 evil-normal-state-map
-	 ("g]" . flymake-goto-next-error)
-	 ("g[" . flymake-goto-prev-error)
-	 ("gi" . eglot-find-implementation))
+         ("g-r" . xref-find-references)
+         ("g-d" . evil-goto-definition-functions)
+	 ("g-i" . eglot-find-implementation)
+	 ("g-]" . flymake-goto-next-error)
+	 ("g-[" . flymake-goto-prev-error))
   :config
   (setq eldoc-echo-area-use-multiline-p nil)
   (add-to-list #'eglot-server-programs '((web-mode) "typescript-language-server" "--stdio"))
   :custom
-  (eglot-autoshutdown t))
-
-;; TODO move to different module
-(defun quit-other-window ()
-  (interactive)
-  (quit-window nil (other-window 1))
-  (other-window 1))
-
-(bind-key "Q" 'quit-other-window)
+  (eglot-autoshutdown t)
+  (eglot-confirm-server-initiated-edits nil))
