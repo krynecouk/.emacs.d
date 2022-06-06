@@ -1,2 +1,2 @@
 (use-package mood-line
-  :config (mood-line-mode))
+  :config (mood-line-mode 1))

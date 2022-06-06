@@ -5,8 +5,6 @@
    ;; ((eglot-managed-p) (eglot-format-buffer))
    (t (indent-region (point-min) (point-max) nil))))
 
-(equal major-mode 'emacs-lisp-mode)
-
 (use-package evil-collection
   :init
   (setq evil-want-keybinding nil)
@@ -48,7 +46,7 @@
   (evil-want-keybinding nil)
   (evil-respect-visual-line-mode t)
   :config
-  (evil-ex-define-cmd "ls" 'persp-ibuffer)
+  (evil-ex-define-cmd "ls" 'persp-buffer-menu)
   (evil-ex-define-cmd "term" 'vterm-toggle)
   (setq evil-want-C-u-scroll t)
   (evil-mode 1))
