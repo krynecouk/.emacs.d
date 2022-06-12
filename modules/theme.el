@@ -1,5 +1,4 @@
-;; (set-frame-font "-*-Fira Code-semibold-normal-normal-*-12-*-*-*-m-0-iso10646-1")
-(set-frame-font "Fira Code Medium 12")
+(set-face-attribute 'default nil :family "Fira Code" :height 120 :weight 'medium :width 'normal)
 
 (setq
  modus-themes-mode-line '(accented borderless (padding 3))
@@ -9,6 +8,7 @@
  modus-themes-paren-match '(bold intense)
  modus-themes-syntax '(green-strings)
  modus-themes-org-blocks 'tinted-background
+ modus-themes-subtle-line-numbers t
  modus-themes-completions
  '((matches . (background intense))
    (selection . (semibold accented intense))
