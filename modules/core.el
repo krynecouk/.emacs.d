@@ -23,7 +23,6 @@
 (menu-bar-mode 0)
 (tool-bar-mode 0)
 (scroll-bar-mode 0)
-(load-theme 'modus-vivendi t)
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 (global-visual-line-mode)
 (visual-line-mode 1)
@@ -38,9 +37,6 @@
  backup-by-copying t
  create-lockfiles nil
  custom-file (concat user-emacs-directory "/custom.el"))
-
-;; font
-(set-frame-font "-*-Fira Code-semibold-normal-normal-*-12-*-*-*-m-0-iso10646-1")
 
 ;; install straight
 (defvar bootstrap-version)

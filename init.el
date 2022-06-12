@@ -1,4 +1,5 @@
 (load-module "core")
+(load-module "theme")
 (load-module "evil")
 (load-module "org")
 (load-module "magit")
