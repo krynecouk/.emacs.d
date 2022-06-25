@@ -4,6 +4,7 @@
 (load-module "org")
 (load-module "magit")
 (load-module "project")
+(load-module "yasnippet")
 (load-module "vterm")
 (load-module "completion")
 (load-module "popper")
