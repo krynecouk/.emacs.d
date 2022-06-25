@@ -6,7 +6,6 @@
 	 :map
 	 evil-normal-state-map
          ("K" . eldoc-doc-buffer)
-         ;; ("g-r" . xref-find-references)
          ("gr" . xref-find-references)
          ("gd" . evil-goto-definition-functions)
 	 ("gi" . eglot-find-implementation)
