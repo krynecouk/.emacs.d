@@ -10,6 +10,7 @@
 (load-module "popper")
 (load-module "deadgrep")
 (load-module "perspective")
+(load-module "denote")
 (load-module "treemacs")
 (load-module "mood-line")
 (load-module "center")
