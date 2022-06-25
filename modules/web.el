@@ -1,7 +1,10 @@
 (use-package prettier-js
   :custom (prettier-js-args '("--print-width" "100"
-                              "--single-quote" "true"
-                              "--trailing-comma" "none"
+                              "--use-tabs" "false"
+                              "--tab-width" "2"
+                              "--singleQuote" "true"
+                              "--trailingComma" "es5"
+                              "--arrowParens" "always"
                               "--semi" "false")))
 
 (use-package web-mode
