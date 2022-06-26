@@ -1,8 +1,8 @@
 (use-package org
-  :hook (org-mode-hook . org-indent)
   :config
   (setq org-indent-mode t)
   :custom
+  (org-startup-indented t)
   (org-src-preserve-indentation t)
   (org-return-follows-link t)
   (org-src-fontify-natively t)
