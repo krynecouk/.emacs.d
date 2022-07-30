@@ -7,7 +7,7 @@
 	 evil-normal-state-map
          ("K" . eldoc-doc-buffer)
          ("gr" . xref-find-references)
-         ("gd" . evil-goto-definition-functions)
+         ("gd" . evil-goto-definition)
 	 ("gi" . eglot-find-implementation)
 	 ("g]" . flymake-goto-next-error)
 	 ("g[" . flymake-goto-prev-error))

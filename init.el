@@ -17,4 +17,5 @@
 (load-module "center")
 (load-module "lsp")
 (load-module "web")
+(load-module "super-save")
 (load-module "custom")
