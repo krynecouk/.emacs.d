@@ -10,3 +10,7 @@
    '((emacs-lisp . t)
      ))
   (org-src-tab-acts-natively t))
+
+(use-package org-journal
+  :custom
+  (org-journal-dir "~/dev/org/journal/"))

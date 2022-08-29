@@ -29,7 +29,8 @@
     "ff" 'format-or-indent
     "<SPC>" 'project-find-file
     "*" 'deadgrep
-    "," 'project-switch-to-buffer
+    ;; "," 'project-switch-to-buffer
+    "," 'consult-project-buffer
     "tt" 'treemacs-display-current-project-exclusively
     "ot" 'vterm-toggle
     "tz" 'centered-window-mode))

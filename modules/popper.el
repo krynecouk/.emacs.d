@@ -12,12 +12,12 @@
                               "Output\\*$"
                               "\\*Async Shell Command\\*"
                               help-mode
-                              "magit:.\*"
+                              ;; "magit:.\*"
                               "\\*deadgrep.\*"
                               "\\*eldoc.\*"
                               "\\*xref\\*"
                               "\\*direnv\\*"
                               "\\*Warnings\\*"
                               "\\*Bookmark List\\*"
-			      "^\\*vterm.*\\*$"  vterm-mode
+			      ;; "^\\*vterm.*\\*$"  vterm-mode
                               compilation-mode)))
