@@ -31,7 +31,8 @@
     "*" 'deadgrep
     ;; "," 'project-switch-to-buffer
     "," 'consult-project-buffer
-    "tt" 'treemacs-display-current-project-exclusively
+    ;; "tt" 'treemacs-display-current-project-exclusively
+    "tt" 'ranger
     "ot" 'vterm-toggle
     "tz" 'centered-window-mode))
 

@@ -20,3 +20,5 @@
    (t . (semilight))))
 
 (load-theme 'modus-vivendi t)
+
+(import "mood-line")
