@@ -4,4 +4,5 @@
   (interactive)
   (quit-window nil (other-window 1)))
 
-(bind-key "Q" 'quit-other-window)
+(evil-define-key 'normal 'global "Q" 'quit-other-window)
+;; (bind-key "Q" 'quit-other-window)

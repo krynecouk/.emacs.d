@@ -13,7 +13,7 @@
                               "\\*Async Shell Command\\*"
                               help-mode
                               ;; "magit:.\*"
-                              "\\*deadgrep.\*"
+                              ;; "\\*deadgrep.\*"
                               "\\*eldoc.\*"
                               "\\*xref\\*"
                               "\\*direnv\\*"
