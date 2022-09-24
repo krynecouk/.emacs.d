@@ -34,7 +34,8 @@
     ;; "tt" 'treemacs-display-current-project-exclusively
     "tt" 'ranger
     "ot" 'vterm-toggle
-    "tz" 'centered-window-mode))
+    "tz" 'centered-window-mode
+    "x" 'execute-extended-command))
 
 (use-package evil-goggles
   :config
