@@ -1,4 +1,4 @@
-(set-face-attribute 'default nil :family "Fira Code" :height 120 :weight 'medium :width 'normal)
+(set-face-attribute 'default nil :family "Fira Code" :height 120 :weight 'regular :width 'normal)
 
 (setq
  modus-themes-mode-line '(accented borderless (padding 3))
