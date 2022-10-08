@@ -1,1 +1,1 @@
-(import '("git" "project" "completion" "yasnippet" "lsp" "web"))
+(import '("git" "project" "completion" "yasnippet" "lsp" "web" "markdown"))
