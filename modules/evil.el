@@ -1,7 +1,7 @@
 (defun format-or-indent ()
   (interactive)
   (cond
-   ((equal major-mode 'web-mode) (prettier-js))
+   ((equal major-mode 'web-mode) (prettier-prettify))
    ;; ((eglot-managed-p) (eglot-format-buffer))
    (t (indent-region (point-min) (point-max) nil))))
 
@@ -26,13 +26,14 @@
   (evil-leader/set-key
     "gg" 'magit
     "pp" 'project-switch-project
+    "pw" 'save-buffer
     "ff" 'format-or-indent
     "<SPC>" 'project-find-file
     "*" 'deadgrep
     ;; "," 'project-switch-to-buffer
     "," 'consult-project-buffer
-    ;; "tt" 'treemacs-display-current-project-exclusively
-    "tt" 'ranger
+    "tt" 'treemacs-display-current-project-exclusively
+    ;; "tt" 'treemacs
     "ot" 'vterm-toggle
     "tz" 'centered-window-mode
     "x" 'execute-extended-command))
@@ -40,6 +41,10 @@
 (use-package evil-goggles
   :config
   (evil-goggles-mode 1))
+
+(use-package evil-quickscope
+  :config
+  (global-evil-quickscope-mode 1))
 
 (use-package evil
   :custom

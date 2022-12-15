@@ -2,7 +2,14 @@
   :config
   (defun hide-line-numbers ()
     (display-line-numbers-mode 0))
-  :hook (vterm-mode . hide-line-numbers)) ;; todo inline lambda
+  (defun vterm-new ()
+    (interactive)
+    (let ((new-name (read-string "Enter new buffer name: ")))
+      (rename-buffer new-name)
+      (vterm)))
+  :bind (:map vterm-mode-map
+              ("C-c C-t" . 'vterm-new))
+  :hook (vterm-mode . hide-line-numbers))
 
 (use-package vterm-toggle
   :custom

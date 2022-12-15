@@ -1,1 +1,1 @@
-(import "ranger")
+(import "treemacs")

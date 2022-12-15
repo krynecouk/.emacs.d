@@ -1,4 +1,4 @@
 (use-package ranger
   :custom
-  (ranger-override-dired 'ranger)
+  (ranger-override-dired 'nil)
   (ranger-deer-show-details nil))
