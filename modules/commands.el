@@ -2,6 +2,10 @@
   (interactive)
   (async-shell-command "yarn nx run one-metadata-frontend:lint"))
 
+(defun one-metadata-frontend-prettier ()
+  (interactive)
+  (async-shell-command "yarn nx run one-metadata-frontend:prettier"))
+
 (defun one-metadata-frontend-serve ()
   (interactive)
   (async-shell-command "yarn nx run one-metadata-frontend:serve"))
@@ -24,5 +28,5 @@
 
 (defun one-metadata-frontend-e2e ()
   (interactive)
-  (let ((test-name (read-string "Enter new test name: ")))
-    (async-shell-command (format "yarn playwright test --config=apps/one-metadata-frontend-e2e/playwright.config.ts --debug -g ") test-name)))
+  (let ((test-name (read-string "Enter test name: ")))
+    (async-shell-command (format "yarn playwright test --config=apps/one-metadata-frontend-e2e/playwright.config.ts --debug -g %s" test-name))))
