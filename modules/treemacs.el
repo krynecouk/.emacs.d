@@ -10,5 +10,6 @@
               ("C-c C-d" . 'treemacs-delete-file)
               ("C-c C-r" . 'treemacs-rename-file)
               ("C-c C-m" . 'treemacs-move-file)
+              ("C-c C-b" . 'treemacs-add-bookmark)
               ("C-c C-y" . 'treemacs-copy-file))
   )
