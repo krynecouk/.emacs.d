@@ -17,7 +17,7 @@
   (setq eldoc-echo-area-use-multiline-p nil)
   (add-to-list #'eglot-server-programs
 	       '((web-mode) "typescript-language-server" "--stdio"))
-  (add-to-list 'eglot-server-programs '(python-mode . ("pyls")))
+  (add-to-list #'eglot-server-programs '(python-mode . ("pyls")))
   :custom
   (eglot-autoshutdown t)
   (eglot-confirm-server-initiated-edits nil))

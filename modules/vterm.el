@@ -8,7 +8,9 @@
       (rename-buffer new-name)
       (vterm)))
   :bind (:map vterm-mode-map
-              ("C-c C-t" . 'vterm-new))
+              ("C-c C-t" . 'vterm-new)
+              ("M-`" . 'persp-switch-last)
+              ("M-t" . 'persp-switch))
   :hook (vterm-mode . hide-line-numbers))
 
 (use-package vterm-toggle
