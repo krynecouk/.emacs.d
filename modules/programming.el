@@ -1,4 +1,4 @@
-(import '("git" "project" "completion" "yasnippet" "lsp" "web" "markdown" "yaml" "kubernetes" "copilot"))
+(import '("git" "project" "completion" "yasnippet" "lsp" "web" "markdown" "yaml" "kubernetes" "copilot" "python"))
 
 (defun load-private-elisp ()
   (let ((root "~/dev/elisp"))

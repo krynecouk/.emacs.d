@@ -1,3 +1,3 @@
 (use-package ef-themes
   :config
-  (load-theme 'ef-autumn t))
+  (load-theme 'ef-trio-dark t))
