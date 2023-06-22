@@ -9,5 +9,6 @@
   :hook (python-mode . pyvenv-mode))
 
 (use-package pytest
-  :after python
-  :hook (python-mode . pytest-mode))
+  :after python)
+
+(setq byte-compile-warnings '(cl-functions))
