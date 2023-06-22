@@ -8,3 +8,7 @@
 	 ("M-`" . persp-switch-last))
   :custom
   (persp-mode-prefix-key (kbd "C-x x")))
+
+(use-package treemacs-perspective
+  :after treemacs perspective
+  :config (treemacs-set-scope-type 'Perspectives))
