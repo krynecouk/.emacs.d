@@ -1,4 +1,7 @@
 (use-package org
+  :bind
+  (:map org-mode-map
+	("C-c s" . #'insert-src-block))
   :config
   (setq org-indent-mode t)
   :custom
@@ -12,12 +15,14 @@
    '((emacs-lisp . t)))
   (org-src-tab-acts-natively t))
 
-(use-package org-journal
-  :custom
-  (org-journal-dir "~/dev/org/journal/"))
-
 (defun org-insert-img-link ()
   "Inserts default img attributes and asks for img link."
   (interactive)
   (insert "#+ATTR_ORG: :width 100\n")
   (org-insert-link))
+
+(defun insert-src-block ()
+  "Inserts a src block in org mode."
+  (interactive)
+  (insert "#+begin_src \n\n#+end_src")
+  (previous-line 2))
