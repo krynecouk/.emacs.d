@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 (import "core")
 (import "theme")
 (import "evil")

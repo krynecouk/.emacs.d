@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 (use-package kubernetes
   :config
   (fset 'kubectl 'kubernetes-overview)

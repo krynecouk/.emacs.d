@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 (use-package denote
   :straight (:host github :repo "protesilaos/denote")
   :custom

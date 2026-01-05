@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 (defun format-or-indent ()
   (interactive)
   (cond
@@ -34,7 +36,6 @@
     "," 'consult-project-buffer
     "tt" 'treemacs-display-current-project-exclusively
     ;; "tt" 'treemacs
-    "ot" 'vterm-toggle
     "tz" 'centered-window-mode
     "x" 'execute-extended-command))
 

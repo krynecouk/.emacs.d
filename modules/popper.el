@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 (use-package popper
   :bind (("C-`"   . popper-toggle-latest)
          ("C-M-`" . popper-toggle-type)

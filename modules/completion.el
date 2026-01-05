@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 (defun yank-pop-indent ()
   "Yank, pop and indent the region."
   (interactive)

@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 (use-package tree-sitter
   :config
   (require 'tree-sitter-langs)

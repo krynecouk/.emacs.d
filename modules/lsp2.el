@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 (use-package posframe)
 (use-package markdown-mode)
 (use-package yasnippet)

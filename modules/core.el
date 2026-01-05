@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 ;; force cmd as meta
 (setq mac-command-modifier 'meta)
 
@@ -62,3 +64,6 @@
         (append
          (split-string-and-unquote path ":")
          exec-path)))
+
+;; keybindings
+(global-set-key (kbd "M-w") 'kill-current-buffer)

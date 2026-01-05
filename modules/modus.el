@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 (setq
  modus-themes-mode-line '(accented borderless (padding 3))
  modus-themes-region '(bg-only)

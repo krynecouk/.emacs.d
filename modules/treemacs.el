@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 (use-package treemacs
   :bind ("M-1" . 'treemacs)
   :config

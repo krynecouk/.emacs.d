@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 (defun path (module)
   (concat user-emacs-directory (concat "/modules/" (concat module ".el"))))
 

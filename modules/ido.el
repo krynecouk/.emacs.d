@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 (setq ido-enable-flex-matching t)
 
 (ido-mode 1)

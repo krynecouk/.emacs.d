@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 (use-package prettier)
 
 (use-package web-mode
