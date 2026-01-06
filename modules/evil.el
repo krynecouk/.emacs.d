@@ -58,4 +58,7 @@
   (evil-ex-define-cmd "ls" 'persp-buffer-menu)
   (evil-ex-define-cmd "term" 'vterm-toggle)
   (setq evil-want-C-u-scroll t)
+  ;; Make j/k move by visual lines instead of actual lines
+  (define-key evil-normal-state-map (kbd "j") 'evil-next-visual-line)
+  (define-key evil-normal-state-map (kbd "k") 'evil-previous-visual-line)
   (evil-mode 1))

@@ -1,3 +1,3 @@
 ;; -*- lexical-binding: t; -*-
 
-(import "treemacs")
+(import "dirvish")

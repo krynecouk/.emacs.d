@@ -1,3 +1,3 @@
 ;; -*- lexical-binding: t; -*-
 
-(import '("org" "denote"))
+(import '("org" "obsidian" "olivetti"))

@@ -10,4 +10,5 @@
      (consult-bookmark "Bookmark" ?b)
      (vterm-toggle "Term" ?t)))
   :bind
-  ("M-p" . project-find-file))
+  ("M-p" . project-find-file)
+  ("M-o" . project-switch-project))
