@@ -1,6 +1,7 @@
 ;; -*- lexical-binding: t; -*-
 
 (use-package project
+  :straight nil
   :custom
   (project-switch-commands
    '((project-find-file "Find file")

@@ -1,6 +1,7 @@
 ;; -*- lexical-binding: t; -*-
 
 (use-package eglot
+  :straight nil
   :hook (
 	 (web-mode . eglot-ensure)
 	 (python-mode . eglot-ensure))

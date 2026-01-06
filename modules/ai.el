@@ -16,10 +16,10 @@
   :config
   (claude-code-ide-emacs-tools-setup)) ; Optionally enable Emacs MCP tools
 
-  ;; ;; Fix Unicode character widths to reduce flickering
-  ;; ;; Claude uses spinner chars (✢✳∗✻✽) and bullets (⏺) with ambiguous East Asian width
-  ;; ;; Setting width to 1 prevents text jumping during animations
-  ;; (dolist (range '((#x23FA . #x23FA) ; ⏺ bullet
-  ;;                  (#x2700 . #x27BF) ; Dingbats (spinner chars ✢✳✻✽)
-  ;;                  (#x2200 . #x22FF))) ; Math operators (∗)
-  ;;   (set-char-table-range char-width-table range 1))
+  ;; Fix Unicode character widths to reduce flickering
+  ;; Claude uses spinner chars (✢✳∗✻✽) and bullets (⏺) with ambiguous East Asian width
+  ;; Setting width to 1 prevents text jumping during animations
+  (dolist (range '((#x23FA . #x23FA) ; ⏺ bullet
+                   (#x2700 . #x27BF) ; Dingbats (spinner chars ✢✳✻✽)
+                   (#x2200 . #x22FF))) ; Math operators (∗)
+    (set-char-table-range char-width-table range 1))
