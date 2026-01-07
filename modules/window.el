@@ -1,6 +1,6 @@
 ;; -*- lexical-binding: t; -*-
 
-(import '("popper" "perspective" "center" "super-save"))
+(import '("popper" "perspective" "super-save"))
 
 (defun quit-other-window ()
   (interactive)

@@ -15,6 +15,4 @@
             (propertize "%]" 'help-echo "Recursive edit, type C-M-c to get out")
             "  "))
 
-;; (import '("ef-themes" "mood-line"))
-
 (import '("doom-theme"))

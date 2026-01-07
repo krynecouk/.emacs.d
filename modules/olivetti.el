@@ -4,7 +4,7 @@
   :ensure t
   :config
   ;; Make the text area wider (default is 70)
-  (setq olivetti-body-width 140)
+  (setq olivetti-body-width 160)
 
   ;; Increase font size when olivetti mode is active
   (defvar my/olivetti-font-scale 1

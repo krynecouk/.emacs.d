@@ -10,5 +10,10 @@
      (consult-bookmark "Bookmark" ?b)
      (vterm-toggle "Term" ?t)))
   :bind
-  ("M-p" . project-find-file)
-  ("M-o" . project-switch-project))
+  ;; ("M-p" . project-find-file)
+  ;; ("M-o" . project-switch-project)
+
+  )
+
+(global-set-key (kbd "M-p") 'project-find-file)
+(global-set-key (kbd "M-o") 'project-switch-project)

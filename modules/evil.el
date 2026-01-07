@@ -34,8 +34,7 @@
     "*" 'deadgrep
     ;; "," 'project-switch-to-buffer
     "," 'consult-project-buffer
-    "tt" 'treemacs-display-current-project-exclusively
-    ;; "tt" 'treemacs
+    "tt" 'dired-sidebar-toggle-sidebar
     "tz" 'centered-window-mode
     "x" 'execute-extended-command))
 
