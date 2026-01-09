@@ -9,6 +9,14 @@
     (kbd "d") #'gptel-context-flag-deletion
     (kbd "RET") #'gptel-context-visit))
 
+;; Register xAI backend
+(gptel-make-xai "xAI"
+  :stream t
+  :key #'gptel-api-key-from-auth-source)
+
+;; Use OpenAI GPT-5.1 as default
+(setq gptel-model 'gpt-5.1)
+
 (global-set-key (kbd "C-c RET") 'gptel-send)
 (global-set-key (kbd "C-c r") 'gptel-rewrite)
 (global-set-key (kbd "C-c ?") 'gptel-menu)

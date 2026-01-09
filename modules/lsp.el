@@ -23,4 +23,5 @@
 	       '((python-mode) "pylsp"))
   :custom
   (eglot-autoshutdown t)
-  (eglot-confirm-server-initiated-edits nil))
+  (eglot-confirm-server-initiated-edits nil)
+  (eglot-mode-line-format ""))
