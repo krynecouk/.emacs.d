@@ -1,8 +1,9 @@
 ;; -*- lexical-binding: t; -*-
 
 ;; (set-face-attribute 'default nil :family "BlexMono Nerd Font" :height 130 :weight 'regular :width 'normal)
-(set-face-attribute 'default nil :family "ZedMono Nerd Font" :height 140 :weight 'regular :width 'normal)
 ;; (set-face-attribute 'default nil :family "JetBrains Mono" :height 130 :weight 'regular :width 'normal)
+
+(set-face-attribute 'default nil :family "ZedMono Nerd Font" :height 140 :weight 'regular :width 'normal)
 (setq-default line-spacing 0.1)
 
 ;; Minimal modeline - hide minor modes, only show major mode

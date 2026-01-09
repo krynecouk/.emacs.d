@@ -1,14 +1,13 @@
 ;; -*- lexical-binding: t; -*-
 
-(use-package python-black
+(use-package ruff-format
   :after python
-  :hook (python-mode . python-black-on-save-mode)
-  :config
-  (setq python-black-extra-args '("--line-length" "79")))
+  :hook (python-mode . ruff-format-on-save-mode))
 
 (use-package pyvenv
   :after python
-  :hook (python-mode . pyvenv-mode))
+  :hook ((python-mode . pyvenv-mode)
+         (python-mode . pyvenv-tracking-mode)))
 
 (use-package pytest
   :after python)

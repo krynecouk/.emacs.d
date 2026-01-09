@@ -18,10 +18,11 @@
 	 ("g[" . flymake-goto-prev-error))
   :config
   (setq eldoc-echo-area-use-multiline-p nil)
+  (setq mode-line-misc-info (assq-delete-all 'eglot--managed-mode mode-line-misc-info))
   (add-to-list #'eglot-server-programs
 	       '((web-mode) "typescript-language-server" "--stdio")
 	       '((python-mode) "pylsp"))
   :custom
   (eglot-autoshutdown t)
   (eglot-confirm-server-initiated-edits nil)
-  (eglot-mode-line-format ""))
+  (eglot-mode-line-format nil))
