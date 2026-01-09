@@ -4,6 +4,7 @@
   :init
   (persp-mode)
   :bind (("M-t" . my/persp-switch-with-project)
+	 ("M-o" . my/project-open-in-persp)
 	 ("M-]" . persp-next)
 	 ("M-r" . persp-rename)
 	 ("M-[" . persp-prev)
@@ -28,8 +29,16 @@ If creating new perspective, prompt for project and auto-rename."
               (project-switch-project project)
               ;; Auto-rename perspective to project name
               (let ((project-name (file-name-nondirectory (directory-file-name project))))
-                (persp-rename project-name)))))))))
+                (persp-rename project-name))))))))
 
-(use-package treemacs-perspective
-  :after treemacs perspective
-  :config (treemacs-set-scope-type 'Perspectives))
+  (defun my/project-open-in-persp ()
+    "Open project in perspective; switch if already open, create new otherwise."
+    (interactive)
+    (let* ((project (completing-read "Project: " (project-known-project-roots) nil t))
+           (project-name (file-name-nondirectory (directory-file-name project)))
+           (existing-persp (seq-find (lambda (p) (string= p project-name))
+                                     (persp-names))))
+      (if existing-persp
+          (persp-switch existing-persp)
+        (persp-switch project-name)
+        (project-switch-project project)))))

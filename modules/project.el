@@ -8,12 +8,6 @@
      (magit-project-status "Magit" ?g)
      (deadgrep "Grep" ?*)
      (consult-bookmark "Bookmark" ?b)
-     (vterm-toggle "Term" ?t)))
-  :bind
-  ;; ("M-p" . project-find-file)
-  ;; ("M-o" . project-switch-project)
-
-  )
+     (vterm-toggle "Term" ?t))))
 
 (global-set-key (kbd "M-p") 'project-find-file)
-(global-set-key (kbd "M-o") 'project-switch-project)
