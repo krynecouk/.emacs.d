@@ -10,6 +10,7 @@
 	 ("M-[" . persp-prev)
 	 ("M-`" . persp-switch-last))
   :custom
+  (persp-initial-frame-name "scratch")
   (persp-mode-prefix-key (kbd "C-x x"))
   :config
   (defun my/persp-switch-with-project ()
