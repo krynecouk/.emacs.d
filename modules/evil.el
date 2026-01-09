@@ -32,10 +32,8 @@
     "ff" 'format-or-indent
     "<SPC>" 'project-find-file
     "*" 'deadgrep
-    ;; "," 'project-switch-to-buffer
     "," 'consult-project-buffer
     "tt" 'dired-sidebar-toggle-sidebar
-    "tz" 'centered-window-mode
     "x" 'execute-extended-command))
 
 (use-package evil-goggles
@@ -47,6 +45,8 @@
   (global-evil-quickscope-mode 1))
 
 (use-package evil
+  :init
+  (setq evil-esc-delay 0.001)
   :custom
   (evil-want-C-u-scroll t)
   (evil-undo-system 'undo-redo)

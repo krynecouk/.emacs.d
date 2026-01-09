@@ -3,8 +3,13 @@
 ;; force cmd as meta
 (setq mac-command-modifier 'meta)
 
-;; gc treshold (100mb)
-(setq gc-cons-threshold 100000000)
+;; performance
+(setq gc-cons-threshold (* 100 1024 1024) ;; 100 MB
+      gc-cons-percentage 0.6
+      redisplay-dont-pause t
+      echo-keystrokes 0.1
+      fast-but-imprecise-scrolling t
+      jit-lock-defer-time 0)
 
 ;; disable some gcc warns
 (setq native-comp-async-report-warnings-errors nil)
