@@ -22,6 +22,16 @@
   (when (file-exists-p persp-state-default-file)
     (persp-state-load persp-state-default-file)))
 
+(defun my/persp-state-reset ()
+  "Delete saved state and kill all perspectives except the current one."
+  (interactive)
+  (when (file-exists-p persp-state-default-file)
+    (delete-file persp-state-default-file))
+  (dolist (name (persp-names))
+    (unless (string= name (persp-current-name))
+      (persp-kill name)))
+  (message "Perspective state reset"))
+
 (defun my/project-open-in-persp ()
   "Open project in a perspective. Select ... to browse for a new project."
   (interactive)
