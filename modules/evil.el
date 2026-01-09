@@ -1,5 +1,8 @@
 ;; -*- lexical-binding: t; -*-
 
+;; Must be set before evil loads
+(setq evil-want-keybinding nil)
+
 (defun format-or-indent ()
   (interactive)
   (cond
@@ -8,8 +11,8 @@
    (t (indent-region (point-min) (point-max) nil))))
 
 (use-package evil-collection
-  :init
-  (setq evil-want-keybinding nil)
+  :after evil
+  :ensure t
   :config
   (evil-collection-init))
 
@@ -51,7 +54,6 @@
   (evil-want-C-u-scroll t)
   (evil-undo-system 'undo-redo)
   (evil-search-module 'evil-search)
-  (evil-want-keybinding nil)
   (evil-respect-visual-line-mode t)
   :config
   (evil-ex-define-cmd "ls" 'persp-buffer-menu)
