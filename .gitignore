@@ -1,5 +1,6 @@
 *
 !.gitignore
+!CLAUDE.md
 !early-init.el
 !init.el
 !README.org
