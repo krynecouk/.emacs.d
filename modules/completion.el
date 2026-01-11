@@ -15,12 +15,6 @@
   :custom
   (vertico-cycle t))
 
-;; (use-package corfu
-;;   :config
-;;   (global-corfu-mode 1)
-;;   :custom
-;;   (corfu-cycle t))
-
 (use-package consult
   :bind (:map
 	 global-map

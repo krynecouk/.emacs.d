@@ -71,4 +71,3 @@
 
 ;; keybindings
 (global-set-key (kbd "M-w") 'kill-current-buffer)
-(global-set-key (kbd "C-c b") 'ido-switch-buffer)
