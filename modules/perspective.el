@@ -23,11 +23,15 @@
     (persp-state-load persp-state-default-file)))
 
 (defun my/project-open-in-persp ()
-  "Open project in a perspective. Select ... to browse for a new project."
+  "Open project in a new perspective. Select ... to browse for a new project."
   (interactive)
   (let* ((input (completing-read "Project: " (cons "..." (project-known-project-roots)) nil t))
          (dir (if (string= input "...") (read-directory-name "Directory: ") input))
-         (name (file-name-nondirectory (directory-file-name dir)))
-         (new-p (not (member name (persp-names)))))
+         (base-name (file-name-nondirectory (directory-file-name dir)))
+         (name base-name)
+         (counter 1))
+    (while (member name (persp-names))
+      (setq name (format "%s<%d>" base-name counter)
+            counter (1+ counter)))
     (persp-switch name)
-    (when new-p (project-switch-project dir))))
+    (project-switch-project dir)))
