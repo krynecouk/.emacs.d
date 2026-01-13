@@ -6,6 +6,7 @@
     (display-line-numbers-mode 0))
   :bind (:map vterm-mode-map
               ("C-c C-t" . 'vterm-new)
+              ("C-<tab>" . 'claude-toggle)
               ("M-`" . 'persp-switch-last)
               ("M-t" . 'persp-switch))
   :hook (vterm-mode . hide-line-numbers))

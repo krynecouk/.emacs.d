@@ -2,7 +2,9 @@
 
 (use-package monet
   ;; :vc (:url "https://github.com/stevemolitor/monet" :rev :newest)
-  :straight (:type git :host github :repo "stevemolitor/monet"))
+  :straight (:type git :host github :repo "stevemolitor/monet")
+  :config
+  (setq monet-diff-cleanup-tool #'my/monet-diff-cleanup))
 
 (use-package claude-code
   :ensure t
@@ -17,13 +19,31 @@
   (monet-mode 1)
   (claude-code-mode)
   :bind-keymap ("C-c c" . claude-code-command-map)
-  :bind (:map claude-code-command-map
-              ("n" . claude-code)
-              ("c" . claude-code-send-command)
+  :bind (("C-c TAB" . claude-code-send-command)
+         :map claude-code-command-map
               ("m" . claude-code-cycle-mode)
               ("?" . claude-code-transient)
               ("<escape>" . claude-code-send-escape)
               ("RET" . claude-code-send-return)))
+
+(defun my/claude-code-restart ()
+  "Kill current Claude Code instance and start a new one."
+  (interactive)
+  (claude-code-kill)
+  (claude-code))
+
+(with-eval-after-load 'claude-code
+  (define-key claude-code-command-map (kbd "n") #'my/claude-code-restart))
+
+(defun my/monet-diff-cleanup (ctx)
+  "Clean up diff, restoring previous buffer instead of deleting window."
+  (dolist (key '(diff-buffer old-temp-buffer new-temp-buffer))
+    (when-let* ((buf (alist-get key ctx))
+                ((buffer-live-p buf)))
+      (when (eq key 'diff-buffer)
+        (when-let* ((win (get-buffer-window buf)))
+          (quit-restore-window win 'bury)))
+      (kill-buffer buf))))
 
 (defun my/claude-code-switch-to-buffer (&optional arg)
   "Switch to Claude buffer in the same window."
@@ -33,7 +53,9 @@
     (if-let* ((buf (claude-code--get-or-prompt-for-buffer)))
         (switch-to-buffer buf)
       (claude-code--show-not-running-message))))
-(define-key claude-code-command-map (kbd "b") #'my/claude-code-switch-to-buffer)
+
+(with-eval-after-load 'claude-code
+  (define-key claude-code-command-map (kbd "b") #'my/claude-code-switch-to-buffer))
 
 (defun my/claude-simplify-region ()
   "Send region to Claude for simplification with file context."
