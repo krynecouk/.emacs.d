@@ -4,7 +4,20 @@
   ;; :vc (:url "https://github.com/stevemolitor/monet" :rev :newest)
   :straight (:type git :host github :repo "stevemolitor/monet")
   :config
-  (setq monet-diff-cleanup-tool #'my/monet-diff-cleanup))
+  (setq monet-diff-cleanup-tool #'my/monet-diff-cleanup)
+  ;; Ensure diff buffers display in current perspective only
+  (add-to-list 'display-buffer-alist
+               '("\\*Diff:.*\\*"
+                 (display-buffer-reuse-window display-buffer-pop-up-window)
+                 (reusable-frames . nil)
+                 (inhibit-switch-frame . t)))
+  ;; Add diff buffers to current perspective when created
+  (defun my/monet-add-diff-to-persp (buf &rest _)
+    "Add monet diff buffer to current perspective."
+    (when (and (bound-and-true-p persp-mode)
+               (string-match-p "\\*Diff:.*\\*" (buffer-name buf)))
+      (persp-add-buffer buf)))
+  (advice-add 'display-buffer :after #'my/monet-add-diff-to-persp))
 
 (use-package claude-code
   :ensure t
@@ -12,15 +25,15 @@
   :init
   (setq claude-code-terminal-backend 'vterm)
   (setq claude-code-display-window-fn #'display-buffer)
-
+  ;; Force C-c TAB to override mode-specific bindings (e.g., python-mode)
+  (bind-key* "C-c TAB" #'claude-code-send-command)
   :config
   ;; optional IDE integration with Monet
   (add-hook 'claude-code-process-environment-functions #'monet-start-server-function)
   (monet-mode 1)
   (claude-code-mode)
   :bind-keymap ("C-c c" . claude-code-command-map)
-  :bind (("C-c TAB" . claude-code-send-command)
-         :map claude-code-command-map
+  :bind (:map claude-code-command-map
               ("m" . claude-code-cycle-mode)
               ("?" . claude-code-transient)
               ("<escape>" . claude-code-send-escape)

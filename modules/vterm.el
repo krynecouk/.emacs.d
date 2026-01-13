@@ -26,7 +26,7 @@
   "Window configuration before showing Claude buffer.")
 
 (defun claude-toggle ()
-  "Toggle the most recent Claude Code vterm buffer.
+  "Toggle the most recent Claude Code vterm buffer in current perspective.
 If currently in a Claude buffer, restore the previous window configuration.
 If a Claude buffer exists and is visible, hide it.
 If a Claude buffer exists but is not visible, show it.
@@ -36,12 +36,15 @@ Otherwise, display a message that no Claude buffer was found."
       (when claude-toggle--previous-window
         (set-window-configuration claude-toggle--previous-window)
         (setq claude-toggle--previous-window nil))
-    (if-let ((buf (seq-find #'claude-buffer-p (buffer-list))))
-        (if-let ((win (get-buffer-window buf)))
-            (delete-window win)
-          (setq claude-toggle--previous-window (current-window-configuration))
-          (pop-to-buffer buf))
-      (message "No Claude buffer found"))))
+    (let ((persp-buffers (if (bound-and-true-p persp-mode)
+                             (persp-buffers (persp-curr))
+                           (buffer-list))))
+      (if-let* ((buf (seq-find #'claude-buffer-p persp-buffers)))
+          (if-let* ((win (get-buffer-window buf)))
+              (delete-window win)
+            (setq claude-toggle--previous-window (current-window-configuration))
+            (pop-to-buffer buf))
+        (message "No Claude buffer found in current perspective")))))
 
 (use-package vterm-toggle
   :bind (("C-`" . vterm-toggle)
