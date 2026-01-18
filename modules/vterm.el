@@ -20,7 +20,8 @@
 
 (defun claude-buffer-p (buffer)
   "Return non-nil if BUFFER is a Claude Code buffer."
-  (string-match-p "\\*[Cc]laude" (buffer-name buffer)))
+  (when-let ((name (and (buffer-live-p buffer) (buffer-name buffer))))
+    (string-match-p "\\*[Cc]laude" name)))
 
 (defvar claude-toggle--previous-window nil
   "Window configuration before showing Claude buffer.")

@@ -2,9 +2,10 @@
 
 (use-package eglot
   :straight nil
-  :hook (
-	 (web-mode . eglot-ensure)
+  :hook ((web-mode . eglot-ensure)
 	 (python-mode . eglot-ensure))
+  :init
+  (bind-key* "C-c C-r" #'eglot-rename)
   :bind (:map
 	 eglot-mode-map
          ("M-RET" . eglot-code-actions)
@@ -19,9 +20,10 @@
   :config
   (setq eldoc-echo-area-use-multiline-p nil)
   (setq mode-line-misc-info (assq-delete-all 'eglot--managed-mode mode-line-misc-info))
-  (add-to-list #'eglot-server-programs
-	       '((web-mode) "typescript-language-server" "--stdio")
-	       '((python-mode) "pylsp"))
+  (add-to-list 'eglot-server-programs
+               '((web-mode) "typescript-language-server" "--stdio"))
+  (add-to-list 'eglot-server-programs
+               '(python-mode "pylsp"))
   :custom
   (eglot-autoshutdown t)
   (eglot-confirm-server-initiated-edits nil)

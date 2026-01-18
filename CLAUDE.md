@@ -61,6 +61,10 @@ Reload individual modules: `M-x load-file RET ~/.emacs.d/modules/MODULE.el`
 
 Full restart: Quit and relaunch Emacs, or `emacs -Q` followed by `eval-buffer` on init.el.
 
+## Code Style
+
+**Custom Functions**: Place custom helper functions at the bottom of module files, after the `use-package` declarations.
+
 ## Dependencies
 
 - Emacs Plus 29+ with native-comp (via Homebrew)

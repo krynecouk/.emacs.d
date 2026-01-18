@@ -31,6 +31,7 @@
 	 ("C-f" . 'consult-line)
 	 ("M-f" . 'consult-ripgrep)
 	 ("gs" . 'consult-imenu)
+	 ("gS" . 'consult-imenu-multi)
          ("g?"   . 'consult-flymake))
   :custom
   (completion-in-region-function 'consult-completion-in-region)

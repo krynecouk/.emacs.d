@@ -3,13 +3,6 @@
 ;; Must be set before evil loads
 (setq evil-want-keybinding nil)
 
-(defun format-or-indent ()
-  (interactive)
-  (cond
-   ((equal major-mode 'web-mode) (prettier-prettify))
-   ;; ((eglot-managed-p) (eglot-format-buffer))
-   (t (indent-region (point-min) (point-max) nil))))
-
 (use-package evil-collection
   :after evil
   :ensure t
@@ -22,7 +15,8 @@
 
 (use-package evil-surround
   :config
-  (global-evil-surround-mode 1))
+  (global-evil-surround-mode 1)
+  (add-to-list 'evil-surround-pairs-alist '(?` . my/surround-code-block)))
 
 (use-package evil-leader
   :config
@@ -58,8 +52,30 @@
   :config
   (evil-ex-define-cmd "ls" 'persp-buffer-menu)
   (evil-ex-define-cmd "term" 'vterm-toggle)
+  (evil-ex-define-cmd "Q" 'persp-kill)
   (setq evil-want-C-u-scroll t)
   ;; Make j/k move by visual lines instead of actual lines
   (define-key evil-normal-state-map (kbd "j") 'evil-next-visual-line)
   (define-key evil-normal-state-map (kbd "k") 'evil-previous-visual-line)
+  ;; macOS-style copy in visual mode
+  (define-key evil-visual-state-map (kbd "M-c") 'evil-yank)
   (evil-mode 1))
+
+;; Custom functions
+
+(defun format-or-indent ()
+  (interactive)
+  (cond
+   ((equal major-mode 'web-mode) (prettier-prettify))
+   ;; ((eglot-managed-p) (eglot-format-buffer))
+   (t (indent-region (point-min) (point-max) nil))))
+
+(defun my/surround-code-block ()
+  "Return code block delimiters, prompting for optional language."
+  (let ((lang (read-string "Language (optional): ")))
+    (if (derived-mode-p 'org-mode)
+        (cons (if (string-empty-p lang)
+                  "#+begin_src "
+                (format "#+begin_src %s " lang))
+              " #+end_src")
+      (cons (format "```%s " lang) " ```"))))
