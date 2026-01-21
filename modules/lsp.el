@@ -23,7 +23,7 @@
   (add-to-list 'eglot-server-programs
                '((web-mode) "typescript-language-server" "--stdio"))
   (add-to-list 'eglot-server-programs
-               '(python-mode "pylsp"))
+               '(python-mode "pyright-langserver" "--stdio"))
   :custom
   (eglot-autoshutdown t)
   (eglot-confirm-server-initiated-edits nil)

@@ -12,7 +12,11 @@
   :straight (:type git :host github :repo "stevemolitor/claude-code.el" :branch "main" :depth 1 :files ("*.el" (:exclude "images/*")))
   :init
   (setq claude-code-terminal-backend 'vterm)
-  (setq claude-code-display-window-fn #'display-buffer)
+  (add-to-list 'display-buffer-alist
+               '("\\*claude"
+                 (display-buffer-in-direction)
+                 (direction . right)
+                 (window-width . 0.4)))
   ;; Force C-c TAB to override mode-specific bindings (e.g., python-mode)
   (bind-key* "C-c C-<tab>" #'claude-code-send-command)
   :config
@@ -20,6 +24,7 @@
   (add-hook 'claude-code-process-environment-functions #'monet-start-server-function)
   (monet-mode 1)
   (claude-code-mode)
+  :bind (("C-<tab>" . claude-code-toggle))
   :bind-keymap ("C-c c" . claude-code-command-map)
   :bind (:map claude-code-command-map
               ("m" . claude-code-cycle-mode)
