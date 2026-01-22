@@ -63,6 +63,11 @@ Full restart: Quit and relaunch Emacs, or `emacs -Q` followed by `eval-buffer` o
 
 ## Code Style
 
+**Modifying Behavior**: When changing how a package or feature behaves:
+1. First check all available configurations, hooks, and customization options the package provides
+2. Only write a custom function if configuration alone cannot achieve the goal
+3. Keep custom functions minimal—no bloat
+
 **Custom Functions**: Place custom helper functions at the bottom of module files, after the `use-package` declarations.
 
 ## Dependencies
