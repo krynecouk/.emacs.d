@@ -17,14 +17,14 @@
                  (display-buffer-in-direction)
                  (direction . right)
                  (window-width . 0.4)))
-  ;; Force C-c TAB to override mode-specific bindings (e.g., python-mode)
+  ;; Force bindings to override mode-specific keymaps (e.g., magit, python-mode)
+  (bind-key* "C-<tab>" #'claude-code-toggle)
   (bind-key* "M-<RET>" #'claude-code-send-command)
   :config
   ;; optional IDE integration with Monet
   (add-hook 'claude-code-process-environment-functions #'monet-start-server-function)
   (monet-mode 1)
   (claude-code-mode)
-  :bind (("C-<tab>" . claude-code-toggle))
   :bind-keymap ("C-c c" . claude-code-command-map)
   :bind (:map claude-code-command-map
               ("m" . claude-code-cycle-mode)
@@ -68,9 +68,9 @@
   "Send command to Claude Code, creating instance after collecting input if needed."
   (if (my/claude-code-project-buffers)
       (apply orig-fn args)
-    (let ((command (read-string "Claude Code command: ")))
+    (let ((command (read-string "Claude command: ")))
       (claude-code)
-      (run-with-timer 0.3 nil
+      (run-with-timer 0.7 nil
                       (lambda ()
                         (when-let* ((buf (car (my/claude-code-project-buffers))))
                           (with-current-buffer buf
