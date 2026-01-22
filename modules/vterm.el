@@ -18,7 +18,16 @@
 
 (use-package vterm-toggle
   :custom
-  (vterm-toggle-scope 'project))
+  (vterm-toggle-scope 'project)
+  (vterm-toggle-fullscreen-p nil))
+
+(add-to-list 'display-buffer-alist
+             '("\\*vterm"
+               (display-buffer-in-direction)
+               (direction . bottom)
+               ;; (window-width . 0.4)
+               (window-height . 0.4)
+	       ))
 
 (global-set-key (kbd "C-`") #'my/vterm-toggle)
 

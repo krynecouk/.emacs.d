@@ -18,7 +18,7 @@
                  (direction . right)
                  (window-width . 0.4)))
   ;; Force C-c TAB to override mode-specific bindings (e.g., python-mode)
-  (bind-key* "C-c C-<tab>" #'claude-code-send-command)
+  (bind-key* "M-<RET>" #'claude-code-send-command)
   :config
   ;; optional IDE integration with Monet
   (add-hook 'claude-code-process-environment-functions #'monet-start-server-function)
