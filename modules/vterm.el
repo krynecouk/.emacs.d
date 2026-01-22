@@ -25,9 +25,21 @@
              '("\\*vterm"
                (display-buffer-in-direction)
                (direction . bottom)
-               ;; (window-width . 0.4)
-               (window-height . 0.4)
-	       ))
+               (window-height . 0.4)))
+
+(defun my/display-single-claude (buffer alist)
+  "Display BUFFER, closing other claude windows first."
+  (dolist (win (window-list))
+    (when (and (not (eq (window-buffer win) (get-buffer buffer)))
+               (string-match-p "\\*claude" (buffer-name (window-buffer win))))
+      (delete-window win)))
+  (display-buffer-in-direction buffer alist))
+
+(add-to-list 'display-buffer-alist
+             '("\\*claude"
+               (my/display-single-claude)
+               (direction . right)
+               (window-width . 0.4)))
 
 (global-set-key (kbd "C-`") #'my/vterm-toggle)
 
@@ -39,18 +51,14 @@
 (defun my/vterm-toggle ()
   "Toggle vterm, ignoring claude-code buffers."
   (interactive)
-  (let* ((vterm-windows
-          (cl-remove-if-not
-           (lambda (win)
-             (with-current-buffer (window-buffer win)
-               (and (derived-mode-p 'vterm-mode)
-                    (not (string-match-p "\\*claude" (buffer-name))))))
-           (window-list))))
-    (if vterm-windows
-        ;; Regular vterm visible - hide it
-        (delete-window (car vterm-windows))
-      ;; No regular vterm visible - show/create one
-      (vterm-toggle-show))))
+  (if-let ((win (cl-find-if
+                 (lambda (w)
+                   (with-current-buffer (window-buffer w)
+                     (and (derived-mode-p 'vterm-mode)
+                          (not (string-match-p "\\*claude" (buffer-name))))))
+                 (window-list))))
+      (delete-window win)
+    (vterm)))
 
 (defun vterm-font-setup ()
   "Configure font settings specifically for vterm buffers, workaround claude-code."
