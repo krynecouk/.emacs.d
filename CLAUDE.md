@@ -70,6 +70,8 @@ Full restart: Quit and relaunch Emacs, or `emacs -Q` followed by `eval-buffer` o
 
 **Custom Functions**: Place custom helper functions at the bottom of module files, after the `use-package` declarations.
 
+**Elisp Conventions**: Always use `if-let*`, `when-let*`, and `and-let*` instead of their non-starred variants (deprecated as of Emacs 31.1).
+
 ## Dependencies
 
 - Emacs Plus 29+ with native-comp (via Homebrew)

@@ -40,8 +40,48 @@
   (sit-for 0.1)
   (claude-code))
 
+(defun my/claude-code-project-buffers ()
+  "Return list of Claude Code buffers for current project."
+  (when-let* ((root (project-root (project-current))))
+    (seq-filter (lambda (buf)
+                  (and (string-prefix-p "*claude" (buffer-name buf))
+                       (string-match-p (regexp-quote root) (buffer-name buf))))
+                (buffer-list))))
+
+(defun my/claude-code-kill-all ()
+  "Kill all Claude Code instances in the current project."
+  (interactive)
+  (dolist (buf (my/claude-code-project-buffers))
+    (when-let* ((proc (get-buffer-process buf)))
+      (set-process-query-on-exit-flag proc nil)
+      (delete-process proc))
+    (kill-buffer buf)))
+
+(defun my/claude-code-toggle-around (orig-fn &rest args)
+  "Toggle Claude Code, creating instance if needed without double-toggling."
+  (if (my/claude-code-project-buffers)
+      (apply orig-fn args)
+    ;; No instance exists - just create it (which also displays it)
+    (claude-code)))
+
+(defun my/claude-code-send-command-around (orig-fn &rest args)
+  "Send command to Claude Code, creating instance after collecting input if needed."
+  (if (my/claude-code-project-buffers)
+      (apply orig-fn args)
+    (let ((command (read-string "Claude Code command: ")))
+      (claude-code)
+      (run-with-timer 0.3 nil
+                      (lambda ()
+                        (when-let* ((buf (car (my/claude-code-project-buffers))))
+                          (with-current-buffer buf
+                            (vterm-send-string command)
+                            (vterm-send-return))))))))
+
 (with-eval-after-load 'claude-code
-  (define-key claude-code-command-map (kbd "n") #'my/claude-code-restart))
+  (define-key claude-code-command-map (kbd "n") #'my/claude-code-restart)
+  (define-key claude-code-command-map (kbd "K") #'my/claude-code-kill-all)
+  (advice-add 'claude-code-toggle :around #'my/claude-code-toggle-around)
+  (advice-add 'claude-code-send-command :around #'my/claude-code-send-command-around))
 
 (defun my/monet-diff-cleanup (ctx)
   "Clean up diff, restoring previous buffer instead of deleting window."
