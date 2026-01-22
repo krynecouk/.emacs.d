@@ -82,22 +82,3 @@
   (define-key claude-code-command-map (kbd "K") #'my/claude-code-kill-all)
   (advice-add 'claude-code-toggle :around #'my/claude-code-toggle-around)
   (advice-add 'claude-code-send-command :around #'my/claude-code-send-command-around))
-
-(defun my/monet-diff-cleanup (ctx)
-  "Clean up diff, restoring previous buffer instead of deleting window."
-  (dolist (key '(diff-buffer old-temp-buffer new-temp-buffer))
-    (when-let* ((buf (alist-get key ctx))
-                ((buffer-live-p buf)))
-      (when (eq key 'diff-buffer)
-        (when-let* ((win (get-buffer-window buf)))
-          (quit-restore-window win 'bury)))
-      (kill-buffer buf))))
-
-(defun my/claude-code-switch-to-buffer (&optional arg)
-  "Switch to Claude buffer in the same window."
-  (interactive "P")
-  (if arg
-      (claude-code--switch-to-all-instances-helper)
-    (if-let* ((buf (claude-code--get-or-prompt-for-buffer)))
-        (switch-to-buffer buf)
-      (claude-code--show-not-running-message))))

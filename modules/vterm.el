@@ -17,52 +17,25 @@
     (vterm)))
 
 (use-package vterm-toggle
+  :bind (("C-`" . vterm-toggle))
   :custom
   (vterm-toggle-scope 'project)
-  (vterm-toggle-fullscreen-p nil))
-
-(add-to-list 'display-buffer-alist
-             '("\\*vterm"
-               (display-buffer-in-direction)
-               (direction . bottom)
-               (window-height . 0.4)))
-
-(defun my/display-single-claude (buffer alist)
-  "Display BUFFER, closing other claude windows first."
-  (dolist (win (window-list))
-    (when (and (not (eq (window-buffer win) (get-buffer buffer)))
-               (string-match-p "\\*claude" (buffer-name (window-buffer win))))
-      (delete-window win)))
-  (display-buffer-in-direction buffer alist))
-
-(add-to-list 'display-buffer-alist
-             '("\\*claude"
-               (my/display-single-claude)
-               (direction . right)
-               (window-width . 0.4)))
-
-(global-set-key (kbd "C-`") #'my/vterm-toggle)
+  (vterm-toggle-fullscreen-p nil)
+  :config
+  (add-to-list 'vterm-toggle-togglable-buffer-functions
+               (lambda (buf) (not (string-match-p "\\*claude" (buffer-name buf)))))
+  (advice-add 'vterm-toggle :around
+              (lambda (fn &rest args)
+                (let ((project-current-directory-override nil))
+                  (apply fn args)))))
 
 (use-package vterm-anti-flicker-filter
   :straight (:type git :host github :repo "martinbaillie/vterm-anti-flicker-filter")
   :after vterm
   :hook (vterm-mode . vterm-anti-flicker-filter-enable))
 
-(defun my/vterm-toggle ()
-  "Toggle vterm, ignoring claude-code buffers."
-  (interactive)
-  (if-let ((win (cl-find-if
-                 (lambda (w)
-                   (with-current-buffer (window-buffer w)
-                     (and (derived-mode-p 'vterm-mode)
-                          (not (string-match-p "\\*claude" (buffer-name))))))
-                 (window-list))))
-      (delete-window win)
-    (vterm)))
-
 (defun vterm-font-setup ()
   "Configure font settings specifically for vterm buffers, workaround claude-code."
-  ;; Apply ASCII replacements for vterm specifically
   (let ((tbl (or buffer-display-table (setq buffer-display-table (make-display-table)))))
     (dolist (pair
 	     '((#x273B . ?*) ; ✻ TEARDROP-SPOKED ASTERISK
