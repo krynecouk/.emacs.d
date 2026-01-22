@@ -1,5 +1,8 @@
 ;; -*- lexical-binding: t; -*-
 
+(defvar my/persp-project-roots (make-hash-table :test 'equal)
+  "Hash table mapping perspective names to their project roots.")
+
 (use-package perspective
   :init
   (persp-mode)
@@ -35,13 +38,11 @@
       (setq name (format "%s<%d>" base-name counter)
             counter (1+ counter)))
     (persp-switch name)
-    (my/persp-set-project-root dir)
+    (puthash name (expand-file-name dir) my/persp-project-roots)
+    (my/persp-set-project-override)
     (project-switch-project dir)))
-
-(defun my/persp-set-project-root (dir)
-  "Store DIR as the project root for the current perspective."
-  (set-persp-parameter 'project-root (expand-file-name dir)))
 
 (defun my/persp-set-project-override (&optional _)
   "Set project-current-directory-override from perspective's stored project root."
-  (setq project-current-directory-override (persp-parameter 'project-root)))
+  (setq project-current-directory-override
+        (gethash (persp-current-name) my/persp-project-roots)))
