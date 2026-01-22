@@ -66,16 +66,15 @@
 
 (defun my/claude-code-send-command-around (orig-fn &rest args)
   "Send command to Claude Code, creating instance after collecting input if needed."
-  (if (my/claude-code-project-buffers)
-      (apply orig-fn args)
-    (let ((command (read-string "Claude command: ")))
+  (let ((command (read-string "Claude command: "))
+        (buf (car (my/claude-code-project-buffers))))
+    (unless buf
       (claude-code)
-      (run-with-timer 0.7 nil
-                      (lambda ()
-                        (when-let* ((buf (car (my/claude-code-project-buffers))))
-                          (with-current-buffer buf
-                            (vterm-send-string command)
-                            (vterm-send-return))))))))
+      (sit-for 0.7)
+      (setq buf (car (my/claude-code-project-buffers))))
+    (with-current-buffer buf
+      (vterm-send-string command)
+      (vterm-send-return))))
 
 (with-eval-after-load 'claude-code
   (define-key claude-code-command-map (kbd "n") #'my/claude-code-restart)
