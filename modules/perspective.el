@@ -19,7 +19,7 @@
   :config
   (add-hook 'kill-emacs-hook #'persp-state-save)
   (add-hook 'emacs-startup-hook #'my/persp-state-restore)
-  (add-hook 'persp-activated-functions #'my/persp-set-project-override))
+  (add-hook 'persp-activated-hook #'my/persp-set-project-override))
 
 (defun my/persp-state-restore ()
   "Restore perspective state from file if it exists."
@@ -42,7 +42,7 @@
     (my/persp-set-project-override)
     (project-switch-project dir)))
 
-(defun my/persp-set-project-override (&optional _)
+(defun my/persp-set-project-override ()
   "Set project-current-directory-override from perspective's stored project root."
   (setq project-current-directory-override
         (gethash (persp-current-name) my/persp-project-roots)))
