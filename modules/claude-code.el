@@ -16,10 +16,10 @@
                '("\\*claude"
                  (display-buffer-in-direction)
                  (direction . right)
-                 (window-width . 0.4)))
+                 (window-width . 0.5)))
   ;; Force bindings to override mode-specific keymaps (e.g., magit, python-mode)
   (bind-key* "C-<tab>" #'claude-code-toggle)
-  (bind-key* "M-<RET>" #'claude-code-send-command)
+  (bind-key* "M-<RET>" #'claude-code-send-command-with-context)
   :config
   ;; optional IDE integration with Monet
   (add-hook 'claude-code-process-environment-functions #'monet-start-server-function)
