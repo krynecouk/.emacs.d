@@ -31,4 +31,72 @@
               ("m" . claude-code-cycle-mode)
               ("?" . claude-code-transient)
               ("<escape>" . claude-code-send-escape)
-              ("RET" . claude-code-send-return)))
+              ("RET" . claude-code-send-return)
+              ("b" . my/claude-code-switch-buffer)
+              (">" . my/claude-code-next-buffer)
+              ("<" . my/claude-code-prev-buffer)
+              ("`" . my/claude-code-toggle-last-buffer)))
+
+(defun my/claude-code-auto-select (orig-fn prompt buffers &optional simple-format)
+  "Skip the prompt and just pick the first buffer."
+  (car buffers))
+
+(advice-add 'claude-code--select-buffer-from-choices :around #'my/claude-code-auto-select)
+
+(defun my/claude-code-switch-buffer ()
+  "Switch the claude side panel to a different project claude buffer."
+  (interactive)
+  (if-let* ((buffers (claude-code--find-claude-buffers-for-directory (claude-code--directory)))
+            (choices (mapcar (lambda (b) (cons (claude-code--buffer-display-name b) b)) buffers))
+            (selected (cdr (assoc (completing-read "Claude: " choices nil t) choices))))
+      (progn
+        (dolist (w (window-list))
+          (when (claude-code--buffer-p (window-buffer w))
+            (delete-window w)))
+        (display-buffer selected))
+    (message "No claude buffers for this project")))
+
+(defun my/claude-code--visible-buffer ()
+  "Return the currently visible claude buffer, or nil."
+  (cl-some (lambda (w)
+             (let ((b (window-buffer w)))
+               (when (claude-code--buffer-p b) b)))
+           (window-list)))
+
+(defun my/claude-code--show-buffer (buf)
+  "Close any visible claude window and display BUF."
+  (dolist (w (window-list))
+    (when (claude-code--buffer-p (window-buffer w))
+      (delete-window w)))
+  (display-buffer buf))
+
+(defun my/claude-code--cycle (offset)
+  "Cycle to claude buffer at OFFSET from the currently visible one."
+  (let ((buffers (claude-code--find-claude-buffers-for-directory (claude-code--directory))))
+    (if (< (length buffers) 2)
+        (message "Only %d claude buffer(s) for this project" (length buffers))
+      (let* ((current (my/claude-code--visible-buffer))
+             (idx (or (cl-position current buffers) 0))
+             (next (nth (mod (+ idx offset) (length buffers)) buffers)))
+        (my/claude-code--show-buffer next)))))
+
+(defun my/claude-code-next-buffer ()
+  "Show the next project claude buffer in the side panel."
+  (interactive)
+  (my/claude-code--cycle 1))
+
+(defun my/claude-code-prev-buffer ()
+  "Show the previous project claude buffer in the side panel."
+  (interactive)
+  (my/claude-code--cycle -1))
+
+(defun my/claude-code-toggle-last-buffer ()
+  "Toggle between current and previous project claude buffer.
+Swaps to whichever buffer isn't currently visible."
+  (interactive)
+  (let ((buffers (claude-code--find-claude-buffers-for-directory (claude-code--directory))))
+    (if (< (length buffers) 2)
+        (message "Only %d claude buffer(s) for this project" (length buffers))
+      (let* ((current (my/claude-code--visible-buffer))
+             (other (if (eq current (car buffers)) (cadr buffers) (car buffers))))
+        (my/claude-code--show-buffer other)))))
