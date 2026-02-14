@@ -29,7 +29,11 @@
 (defun my/project-open-in-persp ()
   "Open project in a new perspective. Select ... to browse for a new project."
   (interactive)
-  (let* ((input (completing-read "Project: " (cons "..." (project-known-project-roots)) nil t))
+  (let* ((projects (seq-filter (lambda (p)
+                                 (or (string-prefix-p "/ssh:" p)
+                                     (file-exists-p p)))
+                               (project-known-project-roots)))
+         (input (completing-read "Project: " (cons "..." projects) nil t))
          (dir (if (string= input "...") (read-directory-name "Directory: ") input))
          (base-name (file-name-nondirectory (directory-file-name dir)))
          (name base-name)
