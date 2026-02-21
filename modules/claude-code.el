@@ -12,7 +12,7 @@
   :straight (:type git :host github :repo "stevemolitor/claude-code.el" :branch "main" :depth 1 :files ("*.el" (:exclude "images/*")))
   :init
   (setq claude-code-terminal-backend 'vterm)
-  ;; (setq claude-code-program-switches '("--dangerously-skip-permissions"))
+  (setq claude-code-program-switches '("--dangerously-skip-permissions"))
   (add-to-list 'display-buffer-alist
                '("\\*claude"
                  (display-buffer-reuse-window display-buffer-in-direction)
@@ -42,6 +42,16 @@
   (car buffers))
 
 (advice-add 'claude-code--select-buffer-from-choices :around #'my/claude-code-auto-select)
+
+(defun my/claude-code-no-cross-project (orig-fn)
+  "Prevent falling back to claude buffers from other projects."
+  (let* ((current-dir (claude-code--directory))
+         (dir-buffers (claude-code--find-claude-buffers-for-directory current-dir)))
+    (if dir-buffers
+        (funcall orig-fn)
+      nil)))
+
+(advice-add 'claude-code--get-or-prompt-for-buffer :around #'my/claude-code-no-cross-project)
 
 (defun my/claude-code-switch-buffer ()
   "Switch the claude side panel to a different project claude buffer."
