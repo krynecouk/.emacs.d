@@ -14,6 +14,10 @@
   #+begin_src sh
   brew install --cask font-zed-mono-nerd-font
   #+end_src
+- CMake (vterm)
+  #+begin_src sh
+  brew install cmake
+  #+end_src
 - ~/.authinfo
   #+begin_src sh
   machine api.openai.com login apikey password <password>
