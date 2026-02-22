@@ -1,3 +1,3 @@
 ;; -*- lexical-binding: t; -*-
 
-(import '("separedit" "git" "project" "completion" "markdown" "yaml" "python" "just" "lsp" "kubernetes"))
+(import '("git" "markdown" "yaml" "python" "just" "lsp" "kubernetes"))
