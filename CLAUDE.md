@@ -20,12 +20,14 @@ Personal Emacs configuration using straight.el for package management and use-pa
 2. `theme` - Font (ZedMono) and theme (Doom)
 3. `evil` - Evil mode + evil-leader (SPC prefix) + plugins
 4. `dired` - File browser with sidebar
-5. `search` - deadgrep integration
-6. `window` - perspective, popper, super-save
-7. `term` - vterm configuration
-8. `note` - org-mode, obsidian, olivetti
-9. `finance` - ledger-mode
-10. `programming` - completion, LSP (eglot), language configs
+5. `minibuffer` - Vertico + Consult + Marginalia + Orderless completion stack
+6. `window` - popper, super-save, dimmer, separedit
+7. `tab` - project + perspective
+8. `term` - vterm configuration
+9. `search` - deadgrep integration
+10. `note` - org-mode, obsidian, olivetti
+11. `programming` - LSP (eglot), git, language configs (markdown, yaml, python, just, kubernetes)
+12. `ai` - gptel + claude-code
 
 ## Key Configuration Patterns
 
@@ -35,14 +37,21 @@ Personal Emacs configuration using straight.el for package management and use-pa
   :config ...)
 ```
 
-**Keybindings**: Evil-leader with SPC prefix for main commands:
+**Evil-leader keybindings** (SPC prefix, normal mode):
 - `SPC SPC` - project-find-file
 - `SPC gg` - magit
-- `SPC pp` - switch project
+- `SPC pp` - project-switch-project
+- `SPC pw` - save-buffer
 - `SPC *` - deadgrep
-- `SPC ,` - buffer list
+- `SPC ,` - consult-project-buffer
+- `SPC tt` - dired-sidebar-toggle-sidebar
 - `SPC ff` - format buffer
 - `SPC x` - M-x
+
+**Keybinding Convention**: Non-evil bindings use `C-c` prefix with semantic sub-prefixes:
+- `C-c c` - Claude Code / AI commands
+- `C-c g` - Git commands (magit, etc.)
+- Additional prefixes should follow the same pattern: letter reflects the domain
 
 **LSP**: Uses built-in eglot (not lsp-mode). LSP keybindings in normal mode:
 - `K` - eldoc
@@ -51,13 +60,13 @@ Personal Emacs configuration using straight.el for package management and use-pa
 - `gi` - find implementation
 - `g]`/`g[` - next/prev error
 
-**Completion**: Vertico + Consult + Marginalia + Orderless stack.
-
 **Perspectives**: `M-t` to switch, `M-o` to open project in perspective, `M-]`/`M-[` next/prev.
 
 ## Testing Changes
 
 Reload individual modules: `M-x load-file RET ~/.emacs.d/modules/MODULE.el`
+
+Some modules are aggregators that import others (e.g., `ai.el` imports `gptel` and `claude-code`; `programming.el` imports `git`, `lsp`, and language modules). Reload the leaf module, not the aggregator, when iterating on a specific package.
 
 Full restart: Quit and relaunch Emacs, or `emacs -Q` followed by `eval-buffer` on init.el.
 
