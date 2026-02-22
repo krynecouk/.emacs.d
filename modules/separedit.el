@@ -11,6 +11,7 @@
   :custom-face
   (separedit-region-face ((t (:background nil))))
   :config
+  (setq enable-recursive-minibuffers t)
   (setq separedit-default-mode 'markdown-mode))
 
 (provide 'separedit)
