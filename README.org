@@ -14,7 +14,7 @@
   #+begin_src sh
   brew install --cask font-zed-mono-nerd-font
   #+end_src
-- .authinfo
+- ~/.authinfo
   #+begin_src sh
   machine api.openai.com login apikey password <password>
   machine api.x.ai login apikey password <password>
