@@ -57,6 +57,7 @@
   ;; Make j/k move by visual lines instead of actual lines
   (define-key evil-normal-state-map (kbd "j") 'evil-next-visual-line)
   (define-key evil-normal-state-map (kbd "k") 'evil-previous-visual-line)
+  (define-key evil-normal-state-map (kbd "'") #'bookmark-in-project-jump)
   ;; macOS-style copy in visual mode
   (define-key evil-visual-state-map (kbd "M-c") 'evil-yank)
   (evil-mode 1))

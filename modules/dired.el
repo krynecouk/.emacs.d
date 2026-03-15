@@ -8,7 +8,10 @@
   (dired-recursive-copies 'always)
   (dired-recursive-deletes 'always)
   (dired-kill-when-opening-new-dired-buffer t)
-  (dired-auto-revert-buffer t))
+  (dired-auto-revert-buffer t)
+  :config
+  (evil-define-key 'normal dired-mode-map (kbd "s") #'dired-mark)
+  (evil-define-key 'normal dired-mode-map (kbd "m") nil))
 
 ;; Sidebar using dired
 (use-package dired-sidebar

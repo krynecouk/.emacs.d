@@ -1,3 +1,3 @@
 ;; -*- lexical-binding: t; -*-
 
-(import '("org" "obsidian" "center"))
+(import '("org" "markdown" "obsidian" "center"))
