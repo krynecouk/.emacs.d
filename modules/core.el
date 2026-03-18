@@ -61,8 +61,8 @@
 (straight-use-package 'use-package)
 (setq straight-use-package-by-default t)
 
-;; copy env variables from ~/.zshrc
-(let ((path (shell-command-to-string ". ~/.zshrc; echo -n $PATH")))
+;; copy env variables from shell (source both .zprofile for brew paths and .zshrc)
+(let ((path (shell-command-to-string ". ~/.zprofile; . ~/.zshrc; echo -n $PATH")))
   (setenv "PATH" path)
   (setq exec-path
         (append
