@@ -13,8 +13,7 @@
 (defun vterm-new ()
   (interactive)
   (let ((new-name (read-string "Enter new buffer name: ")))
-    (rename-buffer new-name)
-    (vterm)))
+    (vterm new-name)))
 
 (use-package vterm-toggle
   :bind (("C-`" . vterm-toggle))
