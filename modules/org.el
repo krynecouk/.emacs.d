@@ -28,3 +28,8 @@
   (interactive)
   (insert "#+begin_src \n\n#+end_src")
   (previous-line 2))
+
+(defun my/pomodoro ()
+  "Start a 25-minute pomodoro timer."
+  (interactive)
+  (org-timer-set-timer 25))
