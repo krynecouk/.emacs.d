@@ -20,6 +20,7 @@
   :straight (:type git :host github :repo "stevemolitor/claude-code.el" :branch "main" :depth 1 :files ("*.el" (:exclude "images/*")))
   :init
   (setq claude-code-terminal-backend 'vterm)
+  (setq claude-code-confirm-kill nil)
   (setq claude-code-program-switches
         (append '("--dangerously-skip-permissions")
                 (my/claude-code-filevine-plugin-dirs)))
@@ -49,10 +50,22 @@
               ("+" . my/claude-code-start-with-repos)))
 
 (defun my/claude-code-auto-select (orig-fn prompt buffers &optional simple-format)
-  "Skip the prompt and just pick the first buffer."
-  (car buffers))
+  "Auto-select first buffer, unless killing—then let the user choose."
+  (if (eq this-command 'claude-code-kill)
+      (funcall orig-fn prompt buffers simple-format)
+    (car buffers)))
 
 (advice-add 'claude-code--select-buffer-from-choices :around #'my/claude-code-auto-select)
+
+(defun my/claude-code-kill-close-window (orig-fn)
+  "Kill Claude and close its window."
+  (let ((win (cl-find-if (lambda (w) (claude-code--buffer-p (window-buffer w)))
+                         (window-list))))
+    (funcall orig-fn)
+    (when (and win (window-live-p win) (> (length (window-list)) 1))
+      (delete-window win))))
+
+(advice-add 'claude-code-kill :around #'my/claude-code-kill-close-window)
 
 (defun my/claude-code-no-cross-project (orig-fn)
   "Prevent falling back to claude buffers from other projects."

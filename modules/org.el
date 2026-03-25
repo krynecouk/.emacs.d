@@ -33,3 +33,8 @@
   "Start a 25-minute pomodoro timer."
   (interactive)
   (org-timer-set-timer 25))
+
+(defun my/pomodoro-pause ()
+  "Start a 5-minute pomodoro break timer."
+  (interactive)
+  (org-timer-set-timer 5))
