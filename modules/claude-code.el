@@ -7,12 +7,22 @@
   ;; (setq monet-diff-cleanup-tool #'my/monet-diff-cleanup)
   (setq monet-diff-tool nil))
 
+(defun my/claude-code-filevine-plugin-dirs ()
+  "Return --plugin-dir flags for all filevine-skills plugins."
+  (let ((dir (expand-file-name "~/dev/filevine-skills/")))
+    (when (file-directory-p dir)
+      (cl-loop for f in (file-expand-wildcards (concat dir "*/.claude-plugin/plugin.json"))
+               collect "--plugin-dir"
+               collect (file-name-directory (directory-file-name (file-name-directory f)))))))
+
 (use-package claude-code
   :ensure t
   :straight (:type git :host github :repo "stevemolitor/claude-code.el" :branch "main" :depth 1 :files ("*.el" (:exclude "images/*")))
   :init
   (setq claude-code-terminal-backend 'vterm)
-  (setq claude-code-program-switches '("--dangerously-skip-permissions"))
+  (setq claude-code-program-switches
+        (append '("--dangerously-skip-permissions")
+                (my/claude-code-filevine-plugin-dirs)))
   (add-to-list 'display-buffer-alist
                '("\\*claude"
                  (display-buffer-reuse-window display-buffer-in-direction)
@@ -35,7 +45,8 @@
               ("b" . my/claude-code-switch-buffer)
               (">" . my/claude-code-next-buffer)
               ("<" . my/claude-code-prev-buffer)
-              ("`" . my/claude-code-toggle-last-buffer)))
+              ("`" . my/claude-code-toggle-last-buffer)
+              ("+" . my/claude-code-start-with-repos)))
 
 (defun my/claude-code-auto-select (orig-fn prompt buffers &optional simple-format)
   "Skip the prompt and just pick the first buffer."
@@ -99,6 +110,17 @@
   "Show the previous project claude buffer in the side panel."
   (interactive)
   (my/claude-code--cycle -1))
+
+(defun my/claude-code-start-with-repos ()
+  "Start Claude Code with additional repos added via --add.
+Prompts to select from known projects using completing-read."
+  (interactive)
+  (let* ((current (expand-file-name (claude-code--directory)))
+         (projects (cl-remove current (project-known-project-roots) :test #'string=))
+         (selected (completing-read "Add repo: " projects nil t))
+         (claude-code-program-switches (append claude-code-program-switches
+                                               (list "--add" (expand-file-name selected)))))
+    (claude-code-new-instance)))
 
 (defun my/claude-code-toggle-last-buffer ()
   "Toggle between current and previous project claude buffer.
