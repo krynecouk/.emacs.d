@@ -7,13 +7,11 @@
   ;; (setq monet-diff-cleanup-tool #'my/monet-diff-cleanup)
   (setq monet-diff-tool nil))
 
-(defun my/claude-code-filevine-plugin-dirs ()
-  "Return --plugin-dir flags for all filevine-skills plugins."
-  (let ((dir (expand-file-name "~/dev/filevine-skills/")))
+(defun my/claude-code-skills-flags ()
+  "Return --plugin-dir and --agent flags for mike-skills."
+  (let ((dir (expand-file-name "~/dev/mike-skills/")))
     (when (file-directory-p dir)
-      (cl-loop for f in (file-expand-wildcards (concat dir "*/.claude-plugin/plugin.json"))
-               collect "--plugin-dir"
-               collect (file-name-directory (directory-file-name (file-name-directory f)))))))
+      (list "--plugin-dir" dir "--agent" "mike"))))
 
 (use-package claude-code
   :ensure t
@@ -23,7 +21,7 @@
   (setq claude-code-confirm-kill nil)
   (setq claude-code-program-switches
         (append '("--dangerously-skip-permissions")
-                (my/claude-code-filevine-plugin-dirs)))
+                (my/claude-code-skills-flags)))
   (add-to-list 'display-buffer-alist
                '("\\*claude"
                  (display-buffer-reuse-window display-buffer-in-direction)
