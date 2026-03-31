@@ -31,7 +31,8 @@
                  (window-width . 0.4)))
   ;; Force bindings to override mode-specific keymaps (e.g., magit, python-mode)
   (bind-key* "C-<tab>" #'claude-code-toggle)
-  (bind-key* "M-<RET>" #'claude-code-send-command-with-context)
+  (bind-key* "M-<RET>" #'claude-code-send-command)
+  (bind-key* "C-z" #'claude-code-toggle-read-only-mode)
   :config
   ;; optional IDE integration with Monet
   (add-hook 'claude-code-process-environment-functions #'monet-start-server-function)
@@ -48,6 +49,7 @@
               ("<" . my/claude-code-prev-buffer)
               ("`" . my/claude-code-toggle-last-buffer)
               ("+" . my/claude-code-start-with-repos)))
+
 
 (defun my/claude-code-auto-select (orig-fn prompt buffers &optional simple-format)
   "Auto-select first buffer, unless killing—then let the user choose."
@@ -67,6 +69,16 @@
 
 (advice-add 'claude-code-kill :around #'my/claude-code-kill-close-window)
 
+(defun my/claude-code-close-existing-windows (orig-fn &rest args)
+  "Close existing Claude windows before starting a new instance."
+  (dolist (w (window-list))
+    (when (and (claude-code--buffer-p (window-buffer w))
+               (> (length (window-list)) 1))
+      (delete-window w)))
+  (apply orig-fn args))
+
+(advice-add 'claude-code :around #'my/claude-code-close-existing-windows)
+
 (defun my/claude-code-no-cross-project (orig-fn)
   "Prevent falling back to claude buffers from other projects."
   (let* ((current-dir (claude-code--directory))
@@ -76,6 +88,20 @@
       nil)))
 
 (advice-add 'claude-code--get-or-prompt-for-buffer :around #'my/claude-code-no-cross-project)
+
+(defun my/claude-code-send-prompt-for-buffer (orig-fn &optional arg)
+  "Prompt for which claude buffer to send to when multiple exist."
+  (let ((dir-buffers (claude-code--find-claude-buffers-for-directory (claude-code--directory))))
+    (if (> (length dir-buffers) 1)
+        (let* ((choices (claude-code--buffers-to-choices dir-buffers t))
+               (selected (cdr (assoc (completing-read "Send to: " choices nil t) choices))))
+          (when selected
+            (cl-letf (((symbol-function 'claude-code--get-or-prompt-for-buffer)
+                       (lambda () selected)))
+              (funcall orig-fn arg))))
+      (funcall orig-fn arg))))
+
+(advice-add 'claude-code-send-command :around #'my/claude-code-send-prompt-for-buffer)
 
 (defun my/claude-code-switch-buffer ()
   "Switch the claude side panel to a different project claude buffer."
