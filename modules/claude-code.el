@@ -11,7 +11,7 @@
   "Return --plugin-dir and --agent flags for mike-skills."
   (let ((dir (expand-file-name "~/dev/mike-skills/")))
     (when (file-directory-p dir)
-      (list "--plugin-dir" dir "--agent" "mike"))))
+      (list "--plugin-dir" dir "--chrome"))))
 
 (use-package claude-code
   :ensure t
@@ -46,7 +46,8 @@
               (">" . my/claude-code-next-buffer)
               ("<" . my/claude-code-prev-buffer)
               ("`" . my/claude-code-toggle-last-buffer)
-              ("+" . my/claude-code-start-with-repos)))
+              ("+" . my/claude-code-start-with-repos)
+              ("N" . my/claude-code-rename-buffer)))
 
 
 (defun my/claude-code-auto-select (orig-fn prompt buffers &optional simple-format)
@@ -158,6 +159,15 @@ Prompts to select from known projects using completing-read."
          (claude-code-program-switches (append claude-code-program-switches
                                                (list "--add" (expand-file-name selected)))))
     (claude-code-new-instance)))
+
+(defun my/claude-code-rename-buffer (new-name)
+  "Rename the visible claude instance to NEW-NAME."
+  (interactive "sRename claude instance to: ")
+  (if-let* ((buffer (my/claude-code--visible-buffer))
+            (dir (claude-code--extract-directory-from-buffer-name (buffer-name buffer))))
+      (with-current-buffer buffer
+        (rename-buffer (format "*claude:%s:%s*" dir new-name)))
+    (message "No visible claude buffer")))
 
 (defun my/claude-code-toggle-last-buffer ()
   "Toggle between current and previous project claude buffer.

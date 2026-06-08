@@ -31,7 +31,8 @@
     "*" 'deadgrep
     "," 'consult-project-buffer
     "tt" 'dired-sidebar-toggle-sidebar
-    "x" 'execute-extended-command))
+    "x" 'execute-extended-command
+    "yl" 'my/copy-file-line))
 
 (use-package evil-goggles
   :config
