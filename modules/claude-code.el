@@ -8,10 +8,14 @@
   (setq monet-diff-tool nil))
 
 (defun my/claude-code-skills-flags ()
-  "Return --plugin-dir and --agent flags for mike-skills."
-  (let ((dir (expand-file-name "~/dev/mike-skills/")))
-    (when (file-directory-p dir)
-      (list "--plugin-dir" dir "--chrome"))))
+  "Return --plugin-dir flags for mike plugins, plus --chrome."
+  (let* ((dirs '("~/dev/mike-skills/" "~/dev/mike-aip-plugin/"))
+         (flags (cl-loop for d in dirs
+                         for full = (expand-file-name d)
+                         when (file-directory-p full)
+                         append (list "--plugin-dir" full))))
+    (when flags
+      (append flags '("--chrome")))))
 
 (use-package claude-code
   :ensure t
