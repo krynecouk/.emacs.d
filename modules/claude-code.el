@@ -8,14 +8,11 @@
   (setq monet-diff-tool nil))
 
 (defun my/claude-code-skills-flags ()
-  "Return --plugin-dir flags for mike plugins, plus --chrome."
-  (let* ((dirs '("~/dev/mike-skills/" "~/dev/mike-aip-plugin/"))
-         (flags (cl-loop for d in dirs
-                         for full = (expand-file-name d)
-                         when (file-directory-p full)
-                         append (list "--plugin-dir" full))))
-    (when flags
-      (append flags '("--chrome")))))
+  "Return --plugin-dir flags for mike plugins."
+  (cl-loop for d in '("~/dev/mike-skills/" "~/dev/mike-aip-plugin/")
+           for full = (expand-file-name d)
+           when (file-directory-p full)
+           append (list "--plugin-dir" full)))
 
 (use-package claude-code
   :ensure t
@@ -24,7 +21,7 @@
   (setq claude-code-terminal-backend 'vterm)
   (setq claude-code-confirm-kill nil)
   (setq claude-code-program-switches
-        (append '("--dangerously-skip-permissions")
+        (append '("--dangerously-skip-permissions" "--chrome")
                 (my/claude-code-skills-flags)))
   (add-to-list 'display-buffer-alist
                '("\\*claude"
@@ -35,6 +32,11 @@
   (bind-key* "C-<tab>" #'claude-code-toggle)
   (bind-key* "M-<RET>" #'claude-code-send-command)
   (bind-key* "C-z" #'claude-code-toggle-read-only-mode)
+  ;; Evil claims C-z (evil-toggle-key) in its state maps, which shadow bind-key*
+  (with-eval-after-load 'evil
+    (define-key evil-motion-state-map (kbd "C-z") nil)
+    (define-key evil-insert-state-map (kbd "C-z") nil)
+    (define-key evil-emacs-state-map (kbd "C-z") nil))
   :config
   ;; optional IDE integration with Monet
   (add-hook 'claude-code-process-environment-functions #'monet-start-server-function)
@@ -51,7 +53,7 @@
               ("<" . my/claude-code-prev-buffer)
               ("`" . my/claude-code-toggle-last-buffer)
               ("+" . my/claude-code-start-with-repos)
-              ("N" . my/claude-code-rename-buffer)))
+              ("n" . my/claude-code-rename-buffer)))
 
 
 (defun my/claude-code-auto-select (orig-fn prompt buffers &optional simple-format)
@@ -164,14 +166,21 @@ Prompts to select from known projects using completing-read."
                                                (list "--add" (expand-file-name selected)))))
     (claude-code-new-instance)))
 
-(defun my/claude-code-rename-buffer (new-name)
-  "Rename the visible claude instance to NEW-NAME."
-  (interactive "sRename claude instance to: ")
-  (if-let* ((buffer (my/claude-code--visible-buffer))
-            (dir (claude-code--extract-directory-from-buffer-name (buffer-name buffer))))
-      (with-current-buffer buffer
-        (rename-buffer (format "*claude:%s:%s*" dir new-name)))
-    (message "No visible claude buffer")))
+(defun my/claude-code-rename-buffer ()
+  "Rename the active claude buffer's instance label."
+  (interactive)
+  (if-let* ((dir (claude-code--directory))
+            (buffers (claude-code--find-claude-buffers-for-directory dir))
+            (buf (or (my/claude-code--visible-buffer) (car buffers))))
+      (let* ((existing (mapcar (lambda (b)
+                                 (or (claude-code--extract-instance-name-from-buffer-name
+                                      (buffer-name b))
+                                     "default"))
+                               (remq buf buffers)))
+             (label (claude-code--prompt-for-instance-name dir existing t)))
+        (with-current-buffer buf
+          (rename-buffer (claude-code--buffer-name label) t)))
+    (message "No claude session for this project")))
 
 (defun my/claude-code-toggle-last-buffer ()
   "Toggle between current and previous project claude buffer.
