@@ -123,9 +123,10 @@ Empty input keeps the default numbered name."
   "Rename the active codex buffer with a new label."
   (interactive)
   (if-let* ((buf (my/codex-ide--target-buffer)))
-      (let ((name (my/codex-ide--labeled-buffer-name
-                   (codex-ide--get-working-directory)
-                   (read-string "Buffer label: "))))
+      (let* ((dir (codex-ide--get-working-directory))
+             ;; Same prompt as claude-code--prompt-for-instance-name
+             (label (read-string (format "Instance name for %s: " (abbreviate-file-name dir))))
+             (name (my/codex-ide--labeled-buffer-name dir label)))
         (with-current-buffer buf
           (rename-buffer name t)))
     (message "No codex session for this project")))

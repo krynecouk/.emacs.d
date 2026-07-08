@@ -12,7 +12,7 @@
   '((claude . (:start claude-code
                :buffer-p claude-code--buffer-p
                :project-buffers my/llm-ide--claude-project-buffers
-               :stop claude-code-kill
+               :kill claude-code--kill-buffer
                :send claude-code-send-command-with-context
                :escape claude-code-send-escape
                :cycle-mode claude-code-cycle-mode
@@ -21,7 +21,7 @@
     (codex . (:start my/codex-ide-start
               :buffer-p codex-ide--session-buffer-p
               :project-buffers my/codex-ide--project-buffers
-              :stop my/codex-ide-stop
+              :kill my/llm-ide--codex-kill
               :send codex-ide-prompt
               :escape codex-ide-interrupt
               :cycle-mode codex-ide-agent-config-menu
@@ -150,10 +150,24 @@
              (other (if (eq current (car buffers)) (cadr buffers) (car buffers))))
         (my/llm-ide--show-buffer other)))))
 
+(defun my/llm-ide--codex-kill (buffer)
+  "Stop the codex session in BUFFER."
+  (with-current-buffer buffer
+    (codex-ide-stop)))
+
 (defun my/llm-ide-kill ()
-  "Kill the active project agent."
+  "Kill a project agent, asking which one when several exist."
   (interactive)
-  (my/llm-ide--dispatch :stop))
+  (if-let* ((buffers (my/llm-ide--project-buffers))
+            (choices (mapcar (lambda (b) (cons (buffer-name b) b)) buffers))
+            (buf (if (cdr buffers)
+                     (cdr (assoc (completing-read "Kill agent: " choices nil t) choices))
+                   (car buffers))))
+      (let ((win (get-buffer-window buf)))
+        (funcall (plist-get (my/llm-ide--backend-of buf) :kill) buf)
+        (when (and win (window-live-p win) (> (length (window-list)) 1))
+          (delete-window win)))
+    (message "No agent for this project")))
 
 (defun my/llm-ide-send-with-context ()
   "Send a prompt with context to the active project agent."
