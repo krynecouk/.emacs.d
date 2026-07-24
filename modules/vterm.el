@@ -22,7 +22,7 @@
   (vterm-toggle-fullscreen-p nil)
   :config
   (add-to-list 'vterm-toggle-togglable-buffer-functions
-               (lambda (buf) (not (string-match-p "\\*claude" (buffer-name buf)))))
+               (lambda (buf) (not (string-match-p "\\*\\(claude\\|codex\\)" (buffer-name buf)))))
   (advice-add 'vterm-toggle :around
               (lambda (fn &rest args)
                 (let ((project-current-directory-override nil))
