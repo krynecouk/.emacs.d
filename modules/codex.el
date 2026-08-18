@@ -84,6 +84,22 @@
   (cl-loop for directory in directories
            append (list "--add-dir" directory)))
 
+(defun my/codex-add-project-directories
+    (orig-fn dir backend instance extra-switches resume-id
+             initial-prompt switch-after)
+  "Add selected project directories when ORIG-FN starts a new terminal session."
+  (let ((switches
+         (if (or resume-id (eq backend 'app-server))
+             extra-switches
+           (append extra-switches
+                   (my/codex--add-dir-switches
+                    (my/codex--read-additional-directories dir))))))
+    (funcall orig-fn dir backend instance switches resume-id
+             initial-prompt switch-after)))
+
+(advice-add 'codex--start-session-buffer
+            :around #'my/codex-add-project-directories)
+
 (defun my/codex-auto-select (orig-fn prompt buffers &optional simple-format)
   "Auto-select first buffer, unless killing—then let the user choose."
   (if (eq this-command 'codex-kill)

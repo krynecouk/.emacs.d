@@ -57,3 +57,51 @@
    (equal (my/codex--add-dir-switches '("/tmp/one/" "/tmp/two/"))
           '("--add-dir" "/tmp/one/" "--add-dir" "/tmp/two/")))
   (should-not (my/codex--add-dir-switches nil)))
+
+(ert-deftest my/codex-adds-selected-directories-to-new-session ()
+  (let (captured-switches)
+    (cl-letf (((symbol-function 'my/codex--read-additional-directories)
+               (lambda (_dir) '("/tmp/one/" "/tmp/two/"))))
+      (my/codex-add-project-directories
+       (lambda (_dir _backend _instance switches _resume-id
+                     _initial-prompt _switch-after)
+         (setq captured-switches switches))
+       "/tmp/current/" 'vterm "default" '("--existing") nil nil nil))
+    (should
+     (equal captured-switches
+            '("--existing" "--add-dir" "/tmp/one/"
+              "--add-dir" "/tmp/two/")))))
+
+(ert-deftest my/codex-empty-selection-preserves-switches ()
+  (let (captured-switches)
+    (cl-letf (((symbol-function 'my/codex--read-additional-directories)
+               (lambda (_dir) nil)))
+      (my/codex-add-project-directories
+       (lambda (_dir _backend _instance switches _resume-id
+                     _initial-prompt _switch-after)
+         (setq captured-switches switches))
+       "/tmp/current/" 'vterm "default" '("--existing") nil nil nil))
+    (should (equal captured-switches '("--existing")))))
+
+(ert-deftest my/codex-resume-bypasses-directory-picker ()
+  (let (captured-switches)
+    (cl-letf (((symbol-function 'my/codex--read-additional-directories)
+               (lambda (_dir) (ert-fail "picker called for resume"))))
+      (my/codex-add-project-directories
+       (lambda (_dir _backend _instance switches _resume-id
+                     _initial-prompt _switch-after)
+         (setq captured-switches switches))
+       "/tmp/current/" 'vterm "default" '("--existing")
+       "session-id" nil nil))
+    (should (equal captured-switches '("--existing")))))
+
+(ert-deftest my/codex-app-server-bypasses-directory-picker ()
+  (let (captured-switches)
+    (cl-letf (((symbol-function 'my/codex--read-additional-directories)
+               (lambda (_dir) (ert-fail "picker called for app-server"))))
+      (my/codex-add-project-directories
+       (lambda (_dir _backend _instance switches _resume-id
+                     _initial-prompt _switch-after)
+         (setq captured-switches switches))
+       "/tmp/current/" 'app-server "default" nil nil nil nil))
+    (should-not captured-switches)))
