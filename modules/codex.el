@@ -43,6 +43,46 @@
               ("`" . my/codex-toggle-last-buffer)
               ("n" . my/codex-rename-buffer)))
 
+(defcustom my/codex-projects-directory "~/dev/"
+  "Directory whose immediate children can be added to Codex sessions."
+  :type 'directory
+  :group 'codex)
+
+(defun my/codex--additional-directory-choices (current-dir)
+  "Return selectable child directories, excluding CURRENT-DIR by true name."
+  (let ((root (expand-file-name my/codex-projects-directory)))
+    (when (and (file-directory-p root) (file-readable-p root))
+      (condition-case nil
+          (let ((current-true (file-name-as-directory
+                               (file-truename current-dir))))
+            (sort
+             (cl-loop for path in (directory-files
+                                   root t directory-files-no-dot-files-regexp)
+                      when (and (file-directory-p path)
+                                (not (equal current-true
+                                            (file-name-as-directory
+                                             (file-truename path)))))
+                      collect (cons
+                               (file-name-nondirectory (directory-file-name path))
+                               (file-name-as-directory (expand-file-name path))))
+             (lambda (left right) (string-lessp (car left) (car right)))))
+        (file-error nil)))))
+
+(defun my/codex--read-additional-directories (current-dir)
+  "Read additional Codex directories for CURRENT-DIR from `~/dev`."
+  (when-let* ((choices (my/codex--additional-directory-choices current-dir))
+              (selected (completing-read-multiple
+                         (format "Add projects (current: %s): "
+                                 (abbreviate-file-name current-dir))
+                         choices nil t)))
+    (delq nil
+          (mapcar (lambda (name) (alist-get name choices nil nil #'string=))
+                  selected))))
+
+(defun my/codex--add-dir-switches (directories)
+  "Return repeated Codex --add-dir switches for DIRECTORIES."
+  (cl-loop for directory in directories
+           append (list "--add-dir" directory)))
 
 (defun my/codex-auto-select (orig-fn prompt buffers &optional simple-format)
   "Auto-select first buffer, unless killing—then let the user choose."
