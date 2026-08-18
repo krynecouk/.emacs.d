@@ -1,10 +1,10 @@
 ;; -*- lexical-binding: t; -*-
 
-;; Unified front-end over claude-code and codex-ide. The backend modules
+;; Unified front-end over claude-code and codex. The backend modules
 ;; own all package-specific config; this module only adds a registry and
 ;; dispatch commands, and rebinds the shared keys last so it wins.
 
-(import '("claude-code" "codex-ide"))
+(import '("claude-code" "codex"))
 
 ;; Each backend maps the unified operations to its own (already interactive)
 ;; commands. Adding an agent = adding an entry here.
@@ -16,17 +16,19 @@
                :send claude-code-send-command-with-context
                :escape claude-code-send-escape
                :cycle-mode claude-code-cycle-mode
+               :read-only claude-code-toggle-read-only-mode
                :rename my/claude-code-rename-buffer
                :menu claude-code-transient))
-    (codex . (:start my/codex-ide-start
-              :buffer-p codex-ide--session-buffer-p
-              :project-buffers my/codex-ide--project-buffers
-              :kill my/llm-ide--codex-kill
-              :send codex-ide-prompt
-              :escape codex-ide-interrupt
-              :cycle-mode codex-ide-agent-config-menu
-              :rename my/codex-ide-rename-buffer
-              :menu codex-ide-menu)))
+    (codex . (:start codex
+              :buffer-p codex--buffer-p
+              :project-buffers my/llm-ide--codex-project-buffers
+              :kill codex--kill-buffer
+              :send codex-send-command-with-context
+              :escape codex-send-escape
+              :cycle-mode codex-cycle-permissions
+              :read-only codex-toggle-read-only-mode
+              :rename my/codex-rename-buffer
+              :menu codex-transient)))
   "Registry of agent backends for the unified commands.")
 
 (defvar my/llm-ide-command-map
@@ -37,6 +39,7 @@
     (define-key map (kbd "TAB") #'my/llm-ide-toggle)
     (define-key map (kbd "s") #'my/llm-ide-send-with-context)
     (define-key map (kbd "m") #'my/llm-ide-cycle-mode)
+    (define-key map (kbd "z") #'my/llm-ide-toggle-read-only)
     (define-key map (kbd "?") #'my/llm-ide-menu)
     (define-key map (kbd "<escape>") #'my/llm-ide-escape)
     (define-key map (kbd "n") #'my/llm-ide-rename-buffer)
@@ -49,11 +52,19 @@
 
 (bind-key* "C-<tab>" #'my/llm-ide-toggle)
 (bind-key* "M-<RET>" #'my/llm-ide-send-with-context)
+;; Rebind after claude-code's own `bind-key*' so this wins and C-z no longer
+;; hijacks codex buffers into a claude window. Evil's C-z is already cleared
+;; by claude-code.el's state-map fixup.
+(bind-key* "C-z" #'my/llm-ide-toggle-read-only)
 (bind-key "C-c c" my/llm-ide-command-map)
 
 (defun my/llm-ide--claude-project-buffers ()
   "Claude session buffers for the current project."
   (claude-code--find-claude-buffers-for-directory (claude-code--directory)))
+
+(defun my/llm-ide--codex-project-buffers ()
+  "Codex session buffers for the current project."
+  (codex--find-codex-buffers-for-directory (codex--directory)))
 
 (defun my/llm-ide--backend-of (buffer)
   "Return the backend plist owning BUFFER, or nil."
@@ -150,11 +161,6 @@
              (other (if (eq current (car buffers)) (cadr buffers) (car buffers))))
         (my/llm-ide--show-buffer other)))))
 
-(defun my/llm-ide--codex-kill (buffer)
-  "Stop the codex session in BUFFER."
-  (with-current-buffer buffer
-    (codex-ide-stop)))
-
 (defun my/llm-ide-kill ()
   "Kill a project agent, asking which one when several exist."
   (interactive)
@@ -183,6 +189,11 @@
   "Cycle/configure the active project agent's permission mode."
   (interactive)
   (my/llm-ide--dispatch :cycle-mode))
+
+(defun my/llm-ide-toggle-read-only ()
+  "Toggle read-only mode for the active project agent buffer."
+  (interactive)
+  (my/llm-ide--dispatch :read-only))
 
 (defun my/llm-ide-rename-buffer ()
   "Rename the active project agent buffer."
