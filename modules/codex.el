@@ -10,6 +10,9 @@
   :init
   (setq codex-terminal-backend 'vterm)
   (setq codex-confirm-kill nil)
+  ;; Evil is the modal editing layer inside Emacs; a second Vim state machine
+  ;; in the Codex TUI consumes input before it can be displayed.
+  (setq codex-program-switches '("-c" "tui.vim_mode_default=false"))
   ;; Equivalent of --dangerously-skip-permissions
   (setq codex-full-auto t)
   (add-to-list 'display-buffer-alist
