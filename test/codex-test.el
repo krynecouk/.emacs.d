@@ -32,7 +32,8 @@
 
 (ert-deftest my/codex-missing-projects-directory-has-no-choices ()
   (let ((my/codex-projects-directory
-         (expand-file-name "missing" temporary-file-directory)))
+         (make-temp-name
+          (expand-file-name "codex-missing-" temporary-file-directory))))
     (should-not
      (my/codex--additional-directory-choices default-directory))))
 
