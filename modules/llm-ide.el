@@ -60,17 +60,22 @@
 
 (defun my/llm-ide--claude-project-buffers ()
   "Claude session buffers for the current project."
-  (claude-code--find-claude-buffers-for-directory (claude-code--directory)))
+  (when (fboundp 'claude-code--find-claude-buffers-for-directory)
+    (claude-code--find-claude-buffers-for-directory (claude-code--directory))))
 
 (defun my/llm-ide--codex-project-buffers ()
   "Codex session buffers for the current project."
-  (codex--find-codex-buffers-for-directory (codex--directory)))
+  (when (fboundp 'codex--find-codex-buffers-for-directory)
+    (codex--find-codex-buffers-for-directory (codex--directory))))
 
 (defun my/llm-ide--backend-of (buffer)
-  "Return the backend plist owning BUFFER, or nil."
+  "Return the backend plist owning BUFFER, or nil.
+A backend whose package is not loaded yet owns no buffers, so its
+`:buffer-p' predicate is skipped until it is defined."
   (cl-some (lambda (backend)
-             (when (funcall (plist-get (cdr backend) :buffer-p) buffer)
-               (cdr backend)))
+             (let ((buffer-p (plist-get (cdr backend) :buffer-p)))
+               (when (and (fboundp buffer-p) (funcall buffer-p buffer))
+                 (cdr backend))))
            my/llm-ide-backends))
 
 (defun my/llm-ide--project-buffers ()
