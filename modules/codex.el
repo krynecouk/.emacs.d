@@ -70,14 +70,33 @@
 
 (defun my/codex--read-additional-directories (current-dir)
   "Read additional Codex directories for CURRENT-DIR from `~/dev`."
-  (when-let* ((choices (my/codex--additional-directory-choices current-dir))
-              (selected (completing-read-multiple
-                         (format "Add projects (current: %s): "
-                                 (abbreviate-file-name current-dir))
-                         choices nil t)))
-    (delq nil
-          (mapcar (lambda (name) (alist-get name choices nil nil #'string=))
-                  selected))))
+  (when-let* ((directories (my/codex--additional-directory-choices current-dir)))
+    (let (selected done)
+      (while (not done)
+        (let* ((choices
+                (cons '("[Done]" . done)
+                      (mapcar
+                       (lambda (directory)
+                         (cons (format "%s %s"
+                                       (if (member (cdr directory) selected)
+                                           "[x]"
+                                         "[ ]")
+                                       (car directory))
+                               (cdr directory)))
+                       directories)))
+               (answer
+                (completing-read
+                 (format "Add projects (%d selected; current: %s): "
+                         (length selected)
+                         (abbreviate-file-name current-dir))
+                 choices nil t nil nil "[Done]"))
+               (directory (alist-get answer choices nil nil #'string=)))
+          (if (eq directory 'done)
+              (setq done t)
+            (if (member directory selected)
+                (setq selected (delete directory selected))
+              (push directory selected)))))
+      (nreverse selected))))
 
 (defun my/codex--add-dir-switches (directories)
   "Return repeated Codex --add-dir switches for DIRECTORIES."

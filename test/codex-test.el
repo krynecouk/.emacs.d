@@ -37,20 +37,42 @@
     (should-not
      (my/codex--additional-directory-choices default-directory))))
 
-(ert-deftest my/codex-reads-multiple-additional-directories ()
+(ert-deftest my/codex-picker-stays-open-until-done ()
   (let* ((root (make-temp-file "codex-projects-" t))
          (alpha (expand-file-name "alpha/" root))
          (zebra (expand-file-name "zebra/" root))
-         (my/codex-projects-directory root))
+         (my/codex-projects-directory root)
+         (answers '("[ ] zebra" "[ ] alpha" "[Done]"))
+         prompts)
     (unwind-protect
         (progn
           (make-directory alpha)
           (make-directory zebra)
-          (cl-letf (((symbol-function 'completing-read-multiple)
-                     (lambda (&rest _) '("zebra" "alpha"))))
+          (cl-letf (((symbol-function 'completing-read)
+                     (lambda (prompt &rest _)
+                       (push prompt prompts)
+                       (pop answers)))
+                    ((symbol-function 'completing-read-multiple)
+                     (lambda (&rest _)
+                       (ert-fail "one-shot multiple reader used"))))
             (should
              (equal (my/codex--read-additional-directories default-directory)
-                    (list zebra alpha)))))
+                    (list zebra alpha)))
+            (should (= (length prompts) 3))))
+      (delete-directory root t))))
+
+(ert-deftest my/codex-picker-can-deselect-a-directory ()
+  (let* ((root (make-temp-file "codex-projects-" t))
+         (alpha (expand-file-name "alpha/" root))
+         (my/codex-projects-directory root)
+         (answers '("[ ] alpha" "[x] alpha" "[Done]")))
+    (unwind-protect
+        (progn
+          (make-directory alpha)
+          (cl-letf (((symbol-function 'completing-read)
+                     (lambda (&rest _) (pop answers))))
+            (should-not
+             (my/codex--read-additional-directories default-directory))))
       (delete-directory root t))))
 
 (ert-deftest my/codex-builds-repeated-add-dir-switches ()
