@@ -247,3 +247,32 @@ Swaps to whichever buffer isn't currently visible."
       (let* ((current (my/codex--visible-buffer))
              (other (if (eq current (car buffers)) (cadr buffers) (car buffers))))
         (my/codex--show-buffer other)))))
+
+(defvar my/codex-session-name-delay 2.0
+  "Seconds to wait after a codex session starts before naming it.
+Gives the terminal time to become ready to accept `/rename'.")
+
+(defun my/codex-always-prompt-name (orig-fn arg &optional extra-switches
+                                            force-prompt force-switch-to-buffer)
+  "Always prompt for an instance name when starting a codex session.
+`codex--start' only backs new sessions (resume and fork use other
+entry points), so the name prompt is forced unconditionally."
+  (funcall orig-fn arg extra-switches t force-switch-to-buffer))
+
+(advice-add 'codex--start :around #'my/codex-always-prompt-name)
+
+(defun my/codex-name-session-on-start ()
+  "Name a new codex session after its buffer's instance label.
+Added to `codex-start-hook'.  Unnamed (default) sessions are left
+alone.  The rename runs via `/rename' once the terminal is ready so the
+session is findable by name when resuming."
+  (when-let* ((name (codex--extract-instance-name-from-buffer-name (buffer-name)))
+              ((not (string= name "default")))
+              (buf (current-buffer)))
+    (run-with-timer my/codex-session-name-delay nil
+                    (lambda ()
+                      (when (buffer-live-p buf)
+                        (codex--send-command-to-buffer
+                         (format "/rename %s" name) buf))))))
+
+(add-hook 'codex-start-hook #'my/codex-name-session-on-start)

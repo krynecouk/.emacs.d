@@ -166,6 +166,25 @@ Prompts to select from known projects using completing-read."
                                                (list "--add" (expand-file-name selected)))))
     (claude-code-new-instance)))
 
+(defvar my/claude-code-session-name-delay 2.0
+  "Seconds to wait after a claude session starts before naming it.
+Gives the terminal time to become ready to accept `/rename'.")
+
+(defun my/claude-code--rename-session (buf name)
+  "Send `/rename NAME' to the claude session in BUF, then submit it.
+Uses timers rather than `sit-for' so it is reliable from a timer too."
+  (when (buffer-live-p buf)
+    (with-current-buffer buf
+      (claude-code--term-send-string claude-code-terminal-backend
+                                     (format "/rename %s" name)))
+    (run-with-timer
+     0.15 nil
+     (lambda ()
+       (when (buffer-live-p buf)
+         (with-current-buffer buf
+           (claude-code--term-send-string claude-code-terminal-backend
+                                          (kbd "RET"))))))))
+
 (defun my/claude-code-rename-buffer ()
   "Rename the active claude buffer and its session to the same label.
 The session is renamed with the `/rename' slash command so it can be
@@ -181,11 +200,8 @@ found by name in the resume picker."
                                (remq buf buffers)))
              (label (claude-code--prompt-for-instance-name dir existing t)))
         (with-current-buffer buf
-          (rename-buffer (claude-code--buffer-name label) t)
-          (claude-code--term-send-string claude-code-terminal-backend
-                                         (format "/rename %s" label))
-          (sit-for 0.1)
-          (claude-code--term-send-string claude-code-terminal-backend (kbd "RET"))))
+          (rename-buffer (claude-code--buffer-name label) t))
+        (my/claude-code--rename-session buf label))
     (message "No claude session for this project")))
 
 (defun my/claude-code-toggle-last-buffer ()
@@ -198,3 +214,27 @@ Swaps to whichever buffer isn't currently visible."
       (let* ((current (my/claude-code--visible-buffer))
              (other (if (eq current (car buffers)) (cadr buffers) (car buffers))))
         (my/claude-code--show-buffer other)))))
+
+(defun my/claude-code-always-prompt-name (orig-fn arg &optional extra-switches
+                                                  force-prompt force-switch-to-buffer)
+  "Always prompt for an instance name when starting a NEW claude session.
+Resume and continue pass EXTRA-SWITCHES, so they keep their own
+prompting behavior."
+  (funcall orig-fn arg extra-switches
+           (if extra-switches force-prompt t)
+           force-switch-to-buffer))
+
+(advice-add 'claude-code--start :around #'my/claude-code-always-prompt-name)
+
+(defun my/claude-code-name-session-on-start ()
+  "Name a new claude session after its buffer's instance label.
+Added to `claude-code-start-hook'.  Unnamed (default) sessions are left
+alone.  The rename runs via `/rename' once the terminal is ready so the
+session is findable by name when resuming."
+  (when-let* ((name (claude-code--extract-instance-name-from-buffer-name (buffer-name)))
+              ((not (string= name "default")))
+              (buf (current-buffer)))
+    (run-with-timer my/claude-code-session-name-delay nil
+                    (lambda () (my/claude-code--rename-session buf name)))))
+
+(add-hook 'claude-code-start-hook #'my/claude-code-name-session-on-start)
