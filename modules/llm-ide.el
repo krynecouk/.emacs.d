@@ -36,7 +36,7 @@
 (defvar my/llm-ide-command-map
   (let ((map (make-sparse-keymap)))
     (define-key map (kbd "c") #'my/llm-ide-start)
-    (define-key map (kbd "R") #'my/llm-ide-resume)
+    (define-key map (kbd "r") #'my/llm-ide-resume)
     (define-key map (kbd "k") #'my/llm-ide-kill)
     (define-key map (kbd "t") #'my/llm-ide-toggle)
     (define-key map (kbd "TAB") #'my/llm-ide-toggle)
