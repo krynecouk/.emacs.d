@@ -167,7 +167,9 @@ Prompts to select from known projects using completing-read."
     (claude-code-new-instance)))
 
 (defun my/claude-code-rename-buffer ()
-  "Rename the active claude buffer's instance label."
+  "Rename the active claude buffer and its session to the same label.
+The session is renamed with the `/rename' slash command so it can be
+found by name in the resume picker."
   (interactive)
   (if-let* ((dir (claude-code--directory))
             (buffers (claude-code--find-claude-buffers-for-directory dir))
@@ -179,7 +181,11 @@ Prompts to select from known projects using completing-read."
                                (remq buf buffers)))
              (label (claude-code--prompt-for-instance-name dir existing t)))
         (with-current-buffer buf
-          (rename-buffer (claude-code--buffer-name label) t)))
+          (rename-buffer (claude-code--buffer-name label) t)
+          (claude-code--term-send-string claude-code-terminal-backend
+                                         (format "/rename %s" label))
+          (sit-for 0.1)
+          (claude-code--term-send-string claude-code-terminal-backend (kbd "RET"))))
     (message "No claude session for this project")))
 
 (defun my/claude-code-toggle-last-buffer ()

@@ -219,7 +219,9 @@
   (my/codex--cycle -1))
 
 (defun my/codex-rename-buffer ()
-  "Rename the active codex buffer's instance label."
+  "Rename the active codex buffer and its session to the same label.
+The session is renamed with the `/rename' slash command so it can be
+found by name in the resume picker."
   (interactive)
   (if-let* ((dir (codex--directory))
             (buffers (codex--find-codex-buffers-for-directory dir))
@@ -231,7 +233,8 @@
                                (remq buf buffers)))
              (label (codex--prompt-for-instance-name dir existing t)))
         (with-current-buffer buf
-          (rename-buffer (codex--buffer-name label) t)))
+          (rename-buffer (codex--buffer-name label) t))
+        (codex--send-command-to-buffer (format "/rename %s" label) buf))
     (message "No codex session for this project")))
 
 (defun my/codex-toggle-last-buffer ()
