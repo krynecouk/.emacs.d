@@ -10,6 +10,7 @@
 ;; commands. Adding an agent = adding an entry here.
 (defvar my/llm-ide-backends
   '((claude . (:start claude-code
+               :resume claude-code-resume
                :buffer-p claude-code--buffer-p
                :project-buffers my/llm-ide--claude-project-buffers
                :kill claude-code--kill-buffer
@@ -20,6 +21,7 @@
                :rename my/claude-code-rename-buffer
                :menu claude-code-transient))
     (codex . (:start codex
+              :resume codex-resume
               :buffer-p codex--buffer-p
               :project-buffers my/llm-ide--codex-project-buffers
               :kill codex--kill-buffer
@@ -34,6 +36,7 @@
 (defvar my/llm-ide-command-map
   (let ((map (make-sparse-keymap)))
     (define-key map (kbd "c") #'my/llm-ide-start)
+    (define-key map (kbd "R") #'my/llm-ide-resume)
     (define-key map (kbd "k") #'my/llm-ide-kill)
     (define-key map (kbd "t") #'my/llm-ide-toggle)
     (define-key map (kbd "TAB") #'my/llm-ide-toggle)
@@ -117,6 +120,14 @@ A backend whose package is not loaded yet owns no buffers, so its
   (let* ((name (completing-read "Start agent: " (mapcar #'car my/llm-ide-backends) nil t))
          (backend (alist-get (intern name) my/llm-ide-backends)))
     (call-interactively (plist-get backend :start))))
+
+(defun my/llm-ide-resume ()
+  "Resume a past session for this project, picking the backend.
+Each backend shows its own picker of resumable sessions."
+  (interactive)
+  (let* ((name (completing-read "Resume agent: " (mapcar #'car my/llm-ide-backends) nil t))
+         (backend (alist-get (intern name) my/llm-ide-backends)))
+    (call-interactively (plist-get backend :resume))))
 
 (defun my/llm-ide-toggle ()
   "Toggle the side panel, showing the last used project agent buffer."
